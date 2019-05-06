@@ -38,10 +38,26 @@ function setStructType(getType,getNum) {
     
     maxCompund = getNum;
     strucType = getType;
+    
+    if (strucType == "Ah") {
+        numAtom = 1;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};           
+    }
+
+
     if (strucType == "A1") {
         numAtom = 1;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};           
+    }
+
+
+    if (strucType == "A3") {
+        numAtom = 2;
+        crystForm = "hex";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]};      
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.667 , 0.333, 0.500]};               
     }
 
     if (strucType == "A2") {
@@ -84,8 +100,18 @@ function setStructType(getType,getNum) {
         numAtom = 2;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.50 , 0.50, 0.50]};  
-        atomPos[1] =  { "Sort": 2 , "Pos":[ 0.51 , 0.51, 0.51]};             
+        atomPos[2] =  { "Sort": 2 , "Pos":[ 0.51 , 0.51, 0.51]};             
     }       
+
+    if (numAtom == 0) {
+        var wrtline = document.createTextNode("selected " + getType + " still not configured :-(");
+        var element = document.getElementById('StructureType').appendChild(wrtline);  
+        var wrtline = document.createTextNode("use default simple cubic");
+        var element = document.getElementById('StructureType').appendChild(wrtline); 
+        numAtom = 1;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};   
+    }
 
 }
 
@@ -100,6 +126,23 @@ function addAtom(getAtom) {
     var element = document.getElementById('CrystalAtoms').appendChild(nxtline); 
     var element = document.getElementById('CrystalAtoms').appendChild(wrtline);  
     
+    if (getAtom == "H") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 1,
+                            "e_spd": [-0.233 ,  0.000,  0.000],
+                            "q_spd": [     1,       0,      0], 
+                            "ratom":  31, 
+                            "nexp": 2.0 };  
+    }
+ 
+    if (getAtom == "He") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 2,
+                            "e_spd": [-0.570 ,  0.000,  0.000],
+                            "q_spd": [     2,       0,      0], 
+                            "ratom":  50, 
+                            "nexp": 2.0 };   
+    }  
 
     if (getAtom == "Li") {
         espdofz[noAtom] = { "atName": getAtom,
@@ -109,6 +152,15 @@ function addAtom(getAtom) {
                             "ratom": 152, 
                             "nexp": 1.7 };  
     }
+
+    if (getAtom == "Be") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 4,
+                            "e_spd": [-0.206 ,  0.000,  0.000],
+                            "q_spd": [     2,       0,      0], 
+                            "ratom": 111, 
+                            "nexp": 1.6 };  
+    }    
   
     if (getAtom == "B") {
         espdofz[noAtom] = { "atName": getAtom,
@@ -138,6 +190,15 @@ function addAtom(getAtom) {
                             "ratom":  71, 
                             "nexp": 2.0 };  
     }
+    
+    if (getAtom == "O") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 8,
+                            "e_spd": [-0.871 , -0.338,  0.000],
+                            "q_spd": [     2,       4,      0], 
+                            "ratom":  66, 
+                            "nexp": 2.0 };  
+    }     
 
     if (getAtom == "F") {
         espdofz[noAtom] = { "atName": getAtom,
@@ -146,6 +207,15 @@ function addAtom(getAtom) {
                             "q_spd": [     2,       5,      0], 
                             "ratom":  57, 
                             "nexp": 1.5 };  
+    }
+
+    if (getAtom == "Ne") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 3,
+                            "e_spd": [-1.323 , -0.498,  0.000],
+                            "q_spd": [     2,       6,      0], 
+                            "ratom":  50, 
+                            "nexp": 2.0 };  
     }
 
     }
@@ -656,7 +726,7 @@ var emaxy = Math.ceil(emaxx/5)*5;
 //
 // Calulate the DOS withni a mesh of approriate size
 console.log("Emins", eminx,eminy,"Emaxs",emaxx,emaxy);
-var mesh = 50;
+var mesh = 100;
 var defbox = (emaxx-eminx)/mesh;
 var dosfit = hist(efsort,mesh);
 normdos = sumV(dosfit)/(lmsum*2)*defbox;
@@ -670,11 +740,11 @@ for (igo = 0; igo < mesh; igo++) {
 }
 var nlabel = Math.floor((emaxy-eminy)/5);
 var ntebox = Math.floor(mesh/nlabel);
-for (igo = 1; igo < nlabel; igo++) {
+for (igo = 1; igo <= nlabel; igo++) {
     dlabel[igo*ntebox] = Math.floor(eminy+5*igo);
 }
 dlabel[0] = form(eminy,1);
-dlabel[mesh-1] = form(emaxy,1);
+//dlabel[mesh-1] = form(emaxy,1);
 console.log ("DOS",dosfit,dlabel);
 
 //    var  A = [[1,0,1],[0,2,0],[0.3,0,1]]; Am = A;
