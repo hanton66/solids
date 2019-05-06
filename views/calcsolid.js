@@ -389,7 +389,10 @@ var pdr= numeric.identity(3);  // power of distance dependenice (1/r^pdr)
 var Vsig = numeric.rep([3,3],0) // sigma-boonding overlap
 var Vpi0= numeric.rep([3,3],0) // pi-bonding overlap
 var Ylm = numeric.rep([3,5],0) // speherical harmonics
+var Elmg00r = numeric.rep([lmsum,lmsum],0) // part of matrix elemnetsvar 
+var Elmg00i = numeric.rep([lmsum,lmsum],0) // part of matrix elemnets
 var Elmg00 = numeric.rep([lmsum,lmsum],0) // part of matrix elemnets
+
 var eev = numeric.rep([nkband,lmsum],0); Solv = [];
 var psk= numeric.rep([9,9],0)  // slater-koster overlaps
 
@@ -431,14 +434,15 @@ for (ik=0; ik < nkband; ik++) {
     console.log ("k-values",ik,kxp,kyp,kzp);
 //
 // set the one-electrone nergies on the diagonals
-    Elmg00 = numeric.rep([lmsum,lmsum],0)
+    Elmg00r = numeric.rep([lmsum,lmsum],0)
+    Elmg00i = numeric.rep([lmsum,lmsum],0)    
     var ialm = 0;
     for (iat = 1; iat <= numAtom; iat++) {
         for (il = 1; il <= e_at[iat].lmax; il++ ) {
             var ilm = 2*il - 1;
             for (var im = 1; im <= ilm; im++) {
-                Elmg00[ialm][ialm] = e_at[iat].erg[il-1];
-                console.log("state",ialm,Elmg00[ialm,ialm]);
+                Elmg00r[ialm][ialm] = e_at[iat].erg[il-1];
+                console.log("state",ialm,Elmg00r[ialm,ialm]);
                 ialm = ialm +1;
             }
         }
@@ -488,7 +492,10 @@ for (ik=0; ik < nkband; ik++) {
                                     jalm = (jat-1)*power(e_at[jat].lmax,2) + jmat - 1;
                                     Esig = dr*sr[iaa].srd*Ylm[il][im]*Ylm[jl][jm]*Vsig[il][jl]*g00[1]*sqrt((4/near[iat]));
                                     Epi0 = dr*sr[iaa].srd*(pv - Ylm[il][im]*Ylm[jl][jm])*Vpi0[il][jl]*g00[1]; 
-                                    Elmg00[ialm][jalm] = Elmg00[ialm][jalm] + Esig + Epi0;
+                                    Elmg00r[ialm][jalm] = Elmg00r[ialm][jalm] + Esig + Epi0;
+                                    Esigi = dr*sr[iaa].srd*Ylm[il][im]*Ylm[jl][jm]*Vsig[il][jl]*g00[2]*sqrt((4/near[iat]));
+                                    Epi0i = dr*sr[iaa].srd*(pv - Ylm[il][im]*Ylm[jl][jm])*Vpi0[il][jl]*g00[2]; 
+                                    Elmg00i[ialm][jalm] = Elmg00i[ialm][jalm] + Esigi + Epi0i;                             
                              //       console.log (imat,jmat,Esig,Epi0);
                                     if (il == 1) { if (im == 2) { if (jl == 1){ if (jm == 0) { 
                     
@@ -508,10 +515,40 @@ for (ik=0; ik < nkband; ik++) {
             }
         }
     }
-    console.log ("Matrixelement P",Elmg00);
+    console.log ("Matrixelement Rea",Elmg00r);
+    console.log ("Matrixelement Img",Elmg00i); 
+    console.log ("Matrixelement tot",Elmg00);    
+    var sumup = 0; sumdn = 0; 
+    var Elmchk = numeric.sub(Elmg00r,Elmg00i);
+    for (igo = 0; igo < lmsum; igo++) {
+            for (jgo = igo+1; jgo < lmsum; jgo++ ) {
+                sumup = sumup + Math.abs(Elmchk[igo][jgo]);
+                sumdn = sumdn + Math.abs(Elmchk[jgo][igo]);
+            }
+    }
+    console.log ("test Upper",sumup,sumdn,Elmchk)
+    if (sumup*sumdn < 0.001 ) {
+        Elmg00i = numeric.rep([lmsum,lmsum],0)
+    }
+
+
+    Elmg00 = numeric.add(Elmg00r,Elmg00i);
     var Solv = numeric.eig(Elmg00); 
-    var eeig = sortV(Solv.lambda.x);
+    var eeigr = Solv.lambda.x;
+    var eeigi = Solv.lambda.y;
+    if (eeigi == null) {
+        eeigi = numeric.rep([lmsum,],0);
+    }
+    console.log ("Matrixelement er,ei",eeigr,eeigi);    
+
+    var eeig = sortV(numeric.add(eeigr,eeigi));        
     console.log ("Matrixelement Erg",eeig,Solv);
+  
+
+//    var Solvi = numeric.eig(Elmg00i); 
+//    var eeigi = sortV(Solvi.lambda.x);
+//    console.log ("Matrixelement Ergi",eeigi,Solvi);
+    
     for (irun = 0; irun < lmsum; irun++) {
         eev[ik][irun] = eeig[irun]/ehart;
     }
