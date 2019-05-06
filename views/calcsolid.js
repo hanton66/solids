@@ -110,7 +110,16 @@ function addAtom(getAtom) {
                             "nexp": 1.7 };  
     }
   
+    if (getAtom == "B") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 5,
+                            "e_spd": [-0.344, -0.137,  0.000],
+                            "q_spd": [     2,       1,      0], 
+                            "ratom":  84, 
+                            "nexp": 1.6 };  
+    }
     
+
     if (getAtom == "C") {
         espdofz[noAtom] = { "atName": getAtom,
                             "atCharge": 6,
@@ -120,6 +129,15 @@ function addAtom(getAtom) {
                             "nexp": 1.7 };  
     }
 
+
+    if (getAtom == "N") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 7,
+                            "e_spd": [-0.676, -0.266,  0.000],
+                            "q_spd": [     2,       3,      0], 
+                            "ratom":  71, 
+                            "nexp": 2.0 };  
+    }
 
     if (getAtom == "F") {
         espdofz[noAtom] = { "atName": getAtom,
@@ -527,7 +545,9 @@ for (ik=0; ik < nkband; ik++) {
             }
     }
     console.log ("test Upper",sumup,sumdn,Elmchk)
+    var corr = 0.0;
     if (sumup*sumdn < 0.001 ) {
+        corr = sumaM(Elmg00i)/lmsum/lmsum*2;
         Elmg00i = numeric.rep([lmsum,lmsum],0)
     }
 
@@ -541,8 +561,14 @@ for (ik=0; ik < nkband; ik++) {
     }
     console.log ("Matrixelement er,ei",eeigr,eeigi);    
 
-    var eeig = sortV(numeric.add(eeigr,eeigi));        
-    console.log ("Matrixelement Erg",eeig,Solv);
+    var eeig = sortV(numeric.add(eeigr,eeigi));     
+    for (igo = 0; igo < lmsum; igo++) {
+            eeig[igo] = eeig[igo] - corr;
+            if (igo > lmsum/2-1) {
+                eeig[igo] = eeig[igo] + 2*corr;
+            }
+    }
+    console.log ("Matrixelement Erg",eeig,corr,Solv);
   
 
 //    var Solvi = numeric.eig(Elmg00i); 
