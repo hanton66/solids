@@ -193,6 +193,19 @@ function maxM(x_in) {
     return y;
 }
 
+//
+// get the sum of all values of vector
+function sumaM(x_in) {
+    var y = 0; 
+    var lt=x_in.length;
+    var y = 0.0;
+    for (igo = 0; igo < lt; igo++) {
+        for (jgo = 0; jgo < lt; jgo ++) {
+            y = y + Math.abs(x_in[igo][jgo])
+        }
+    }
+    return y;
+}
 
 
 //
