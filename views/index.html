@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <title>Universe Simulation</title>
+    <title>Solid State Calculation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <link rel="icon" type="image/png" href="universe.png"/>
-    <link rel="apple-touch-icon" href="universe.png"/>
-    <link rel="apple-touch-startup-image" href="universe.png" />
+    <link rel="icon" type="image/png" href="solidstate.png"/>
+    <link rel="apple-touch-icon" href="solidstate.png"/>
+    <link rel="apple-touch-startup-image" href="solidstate.png" />
     <style type="text/css" media="screen">@import "iphonenav.css";</style>
     <script src="iphonenav.js"></script>
     <script src="somemathfunc.js"> </script>
@@ -21,7 +21,7 @@
             img {
               background: white;
               border: 1px solid black;
-              width: 100%; 
+              width: 75%; 
               height: auto;	
             }
     </style>
@@ -29,14 +29,14 @@
 
 </head>
   <body>
-    <h1 id="pageTitle">Universe Simulation</h1>
+    <h1 id="pageTitle">Solid State Calculation</h1>
     <a id="homeButton" class="button" onclick="location.reload(true)">New</a>
     <a id="viewButton" class="button" href="#menue">View</a>
     
 
-    <form id="start" class="panel" title="Universe Simulation" selected="true">
-        <img src="universe.png">
-        <p>You can create your own Universe by adjusting a few Parameters.<br></p>
+    <form id="start" class="panel" title="Solid State Calculation" selected="true">
+        <img src="solidstate.png">
+        <p>Calculate the solid state electronic and physical properties of any solid.<br></p>
         <a href="#setCrystal">
             <button  type="button"> Select StructureType </button>
         </a>
@@ -91,20 +91,29 @@
     <form id="setAtoms" class="panel" title="Select Elements" >
 
             <table width="90%">
+                <tr><td colspan=6>Semi-Metals</td></tr>
                 <tr>
-                    <td><a onclick="addAtom('H');"><button> H </button></a></td>
-                    <td colspan="6"></td>
-                    <td><a onclick="addAtom('He');"><button> He </button></a></td>
-                </tr>
-                <tr>
-                    <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
-                    <td><a onclick="addAtom('Be');"><button> Be </button></a></td>
                     <td><a onclick="addAtom('B');"><button> B </button></a></td>
-                    <td><a onclick="addAtom('C');"><button> C </button></a></td>
-                    <td><a onclick="addAtom('N');"><button> N </button></a></td>
-                    <td><a onclick="addAtom('O');"><button> O </button></a></td>
-                    <td><a onclick="addAtom('F');"><button> F </button></a></td>
-                    <td><a onclick="addAtom('Ne');"><button> Ne </button></a></td>                                      
+                    <td><a onclick="addAtom('C');"><button> C </button></a></td>      
+                </tr>
+                <tr><td colspan=6>Metals</td></tr>
+                <tr>                  
+                        <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
+                        <td><a onclick="addAtom('Be');"><button> Be </button></a></td>      
+                    </tr>
+                <tr><td colspan=6>Non-Metals</td></tr>
+                <tr>
+                        <td><a onclick="addAtom('H');"><button> H </button></a></td>
+                        <td><a onclick="addAtom('N');"><button> N </button></a></td>
+                        <td><a onclick="addAtom('O');"><button> O </button></a></td>     
+                        <td><a onclick="addAtom('F');"><button> F </button></a></td>         
+                </tr>                
+                <tr><td colspan=6>Transition-Metals</td></tr>
+                <tr><td colspan=6>Rare-Earth-Metals</td></tr>
+                <tr><td colspan=6>Noble Gases</td></tr>  
+                <tr>
+                    <td><a onclick="addAtom('He');"><button> He </button></a></td>                      
+                    <td><a onclick="addAtom('Ne');"><button> Ne </button></a></td>                                                  
                 </tr>
             </table>
             <a onclick="delAtom();">
