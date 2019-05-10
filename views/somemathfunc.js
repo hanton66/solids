@@ -221,7 +221,9 @@ function form(x, z) {
 //
 function txtout(txtstr,elemstr) {
 var nxtline = document.createElement('br');
+var element = document.getElementById(elemstr).appendChild(nxtline);
+var nxtline = document.createElement('br');
 var element = document.getElementById(elemstr).appendChild(nxtline); 
 var wrtline = document.createTextNode(txtstr);
-var element = document.getElementById('ReportCalc').appendChild(wrtline);
+var element = document.getElementById(elemstr).appendChild(wrtline);
 }

@@ -113,6 +113,10 @@ function setStructType(getType,getNum) {
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};   
     }
 
+    if (numAtom >= 1) {
+        document.getElementById('selectAtoms').disabled = false; 
+    }
+
 }
 
 
@@ -121,16 +125,12 @@ function buildCrystal() {
      var rt = 1; 
      var eatom = 0.0; etotatom = 0.0; nvalat = 0; 
 
-     var nxtline = document.createElement('br');
-     var element = document.getElementById('ReportCalc').appendChild(nxtline); 
-     var wrtline = document.createTextNode("Calculate Lattice Parameter of " + strucType + ".");
-     var element = document.getElementById('ReportCalc').appendChild(wrtline);     
-     var wrtline = document.createTextNode("with " + numAtom + " atoms.");
-     var element = document.getElementById('ReportCalc').appendChild(wrtline);     
-     var wrtline = document.createTextNode("from" + maxCompund + " compunds.");     
-     var element = document.getElementById('ReportCalc').appendChild(wrtline); 
-     var wrtline = document.createTextNode("in a " + crystForm + " crystal form.");
-     var element = document.getElementById('ReportCalc').appendChild(wrtline); 
+    var elemstr = "ReportCalc"
+    var txtstr = "We calculate a crystal of structure type " + strucType 
+                + "with " + numAtom + " atom(s) in the unit cell. " 
+                + "The atoms are of " + maxCompund + " different compund(s)."
+                + " The crystal form is " + crystForm;
+    txtout(txtstr, elemstr);
 
     console.log(maxCompund);
      for (iatom = 1; iatom <= numAtom; iatom++ ) {
@@ -194,7 +194,7 @@ if (crystForm == "cub") {
    var BPoint = [0.5, 0.0, 0.0];  // X
    var CPoint = [0.5, 0.5, 0.5];  // R
    var blable = ["M","G","X","R"];   
-   var b1titel = "Bandindex M - G - X - R - Projected DOS";
+   var b1titel = "Bandindex M - G - X - R";
 }
 
 if (crystForm == "fcc") {
@@ -205,7 +205,7 @@ if (crystForm == "fcc") {
     var BPoint = [0.0, 1.0, 0.0];  // X
     var CPoint = [0.5, 0.5, 0.0];  // K
     var blable = ["L","G","X","K"];
-    var b1titel = "Bandindex L - G - X - K - Projected DOS";
+    var b1titel = "Bandindex L - G - X - K";
  }
 
  if (crystForm == "bcc") {
@@ -216,16 +216,39 @@ if (crystForm == "fcc") {
     var BPoint = [0.00, 0.50, 0.00];  // H
     var CPoint = [0.25, 0.25, 0.00];  // N
     var blable = ["P","G","H","N"];
-    var b1titel = "Bandindex P - G - H - N - Projected DOS";
+    var b1titel = "Bandindex P - G - H - N";
  }
+
+ var elemstr = "BandCalc";
+ var txtstr = "The bandstructure is determined for the symmetry points " 
+                 + "[" + APoint + "], "
+                 + "[" + BPoint + "], "
+                 + "[" + CPoint + "]"                                 
+                 + " and of course the Gamma-Point G. "
+                 + "The k-points are labeld as " + b1titel + ".";
+ txtout(txtstr,elemstr);
+
 
 //
 // determine the real spacelattice vectors
-var T = [t1,t2,t3]
+var T = [t1,t2,t3];
 var volume = numeric.det(T);
+
+var elemstr = "ReportCalc";
+var txtstr = "The real lattice vectors T are defined as " 
+                + "{ [" + t1 + "] / [" + t2 + "] / [" + t3 + "] }.";
+txtout(txtstr,elemstr);
+
+
 //
 // Determine the set of reciprocal space and k-Vectors 
 var B = numeric.inv(T)
+
+var elemstr = "ReportCalc";
+var txtstr = "Which leads to following reciprocal space vectors B = " 
+                + "{ [" + B + "]}.";
+txtout(txtstr,elemstr);
+
 var nkband = 4; var kpoint = [APoint , GPoint , BPoint , CPoint];
 for (irun=0; irun < nkband; irun++) {
 //    kpoint[irun] = [sum(kpoint(i,1).*b1),sum(kpoint(i,2).*b2),sum(kpoint(i,3).*b3)]
@@ -235,11 +258,6 @@ for (irun=0; irun < nkband; irun++) {
                     ];
 
 }
-
-console.log (T);
-console.log (volume);
-console.log (b1titel);
-console.log (kpoint);
 
 //
 // build a super cell and determine the vectors between the neighbored cells
@@ -255,9 +273,6 @@ for (h=-ncut; h <= ncut; h++) {
     }
  } 
  var nq = iq 
- console.log (nq);
- console.log (vecpos);
- console.log ("Atompos ",atomPos[1].Pos);
 //
 // determine the real atomic positions within the unit cell and the super cell
 var xatomcor = [];
@@ -276,9 +291,6 @@ igo = 0;
     }
 }
 numPos = igo;
-console.log ("Number of xPos",numPos);
-console.log ("xatomcor",xatomcor);
-
 //
 // Determine the distances between the atoms
 var dmin = numeric.rep([numAtom,numAtom],10000); totmin = 10000;
@@ -301,7 +313,7 @@ for (iat = 1; iat <= numAtom; iat++) {
 }  
 console.log("NN-Distance",totmin);
 
-   
+//   
 // ...and the nearest neighbours
 var sr = []; srd = 0; iaa = 0
 for (iat = 1; iat <= numAtom; iat++) {
@@ -326,10 +338,6 @@ for (iat = 1; iat <= numAtom; iat++) {
     }
 }
 
-console.log ("Effecive Coordination",near);
-console.log ("Nummber Posistion", numPos, "number of Atoms",numAtom,"Nummber WW",iaa);
-console.log (sr);
-
 //
 // No we determine the lattice constant by Muffin-Tin Approx
 
@@ -345,6 +353,15 @@ for (iat = 1; iat <= numAtom; iat++) {
 console.log("aest",aest);
 alat = maxM(aest)/100/anull;
 console.log("Lattice Constant:",alat*anull);
+
+var elemstr = "ReportCalc";
+var txtstr = "From the investigation of the super cell of 27 neighbour unit cells, " 
+            + "we determine that the smallest distance is " + form(totmin,3) + " fractional units. "
+            + "This leads to an effective coordination number of  " + form(near[1],1) 
+            + " for the first atom etc. Under the assumptions, that the neighbour atoms "
+            + "are touchuing each other according to their atomic radius we can determine "
+            + "the lattice constant a = " + form(alat*anull*100,1) + " pm."; 
+txtout(txtstr,elemstr);
 
 //
 // now we define the tight biding parameters
@@ -493,7 +510,7 @@ for (ik=0; ik < nkband; ik++) {
     var corr = 0.0;
     if (sumup*sumdn < 0.001 ) {
         corr = sumaM(Elmg00i)/lmsum/lmsum*2;
-        Elmg00i = numeric.rep([lmsum,lmsum],0)
+        Elmg00i = numeric.rep([lmsum,lmsum],0);
     }
 
 

@@ -22,9 +22,16 @@
             img {
               background: white;
               border: 1px solid black;
-              width: 75%; 
+              width: 10%; 
               height: auto;	
             }
+            canvas {
+              background: white;
+              border: 0px solid black;
+              width: 100%; 
+              height: auto;	
+            }
+
     </style>
 
 
@@ -32,7 +39,7 @@
   <body>
     <h1 id="pageTitle">Solid State Calculation</h1>
     <a id="homeButton" class="button" onclick="location.reload(true)">New</a>
-    <a id="viewButton" class="button" href="#menue">View</a>
+    <a id="viewButton" class="button" onclick="print()">Print</a>
     
 
     <form id="start" class="panel" title="Solid State Calculation" selected="true">
@@ -53,6 +60,7 @@
                 <td><a onclick="setStructType('Ah',1);"><button> Ah </button></a></td>                
                 <td><a onclick="setStructType('A1',1);"><button> A1 </button></a></td>
                 <td><a onclick="setStructType('A2',1);"><button> A2 </button></a></td>
+                <td><a onclick="setStructType('A3',1);"><button> A2 </button></a></td>                
                 <td><a onclick="setStructType('A4',1);"><button> A4 </button></a></td>
             </tr>
         </table>
@@ -83,7 +91,7 @@
         <div id="StructureType"></div>
         <HR>
         <a href="#setAtoms">
-            <button  type="button"> =>> Select Atoms </button>
+            <button  id="selectAtoms" type="button" disabled="true"> ==> Select Atoms </button>
         </a>
 
     </form>
@@ -91,31 +99,37 @@
 
     <form id="setAtoms" class="panel" title="Select Elements" >
 
-            <table width="90%">
-                <tr><td colspan=6>Semi-Metals</td></tr>
+            <table width="95%">
+                <tr><td colspan=7>Semi-Metals</td></tr>
                 <tr>
                     <td><a onclick="addAtom('B');"><button> B </button></a></td>
                     <td><a onclick="addAtom('C');"><button> C </button></a></td>   
-                    <td><a onclick="addAtom('Si');"><button> Si </button></a></td>                         
+                    <td><a onclick="addAtom('Si');"><button> Si </button></a></td>
+                    <td><a onclick="addAtom('P');"><button> P </button></a></td>                                              
                     <td><a onclick="addAtom('Ga');"><button> Ga </button></a></td>
                     <td><a onclick="addAtom('Ge');"><button> Ge </button></a></td>
                     <td><a onclick="addAtom('As');"><button> As </button></a></td>                    
                 </tr>
-                <tr><td colspan=6>Metals</td></tr>
+                <tr><td colspan=7>Metals</td></tr>
                 <tr>                  
                         <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
-                        <td><a onclick="addAtom('Be');"><button> Be </button></a></td>      
+                        <td><a onclick="addAtom('Be');"><button> Be </button></a></td>   
+                        <td><a onclick="addAtom('Na');"><button> Na </button></a></td> 
+                        <td><a onclick="addAtom('Ca');"><button> Ca </button></a></td> 
+                        <td><a onclick="addAtom('Al');"><button> Al </button></a></td>                                                                            
                     </tr>
-                <tr><td colspan=6>Non-Metals</td></tr>
+                <tr><td colspan=7>Non-Metals</td></tr>
                 <tr>
                         <td><a onclick="addAtom('H');"><button> H </button></a></td>
                         <td><a onclick="addAtom('N');"><button> N </button></a></td>
                         <td><a onclick="addAtom('O');"><button> O </button></a></td>     
-                        <td><a onclick="addAtom('F');"><button> F </button></a></td>         
+                        <td><a onclick="addAtom('F');"><button> F </button></a></td>   
+                        <td><a onclick="addAtom('S');"><button> S </button></a></td> 
+                        <td><a onclick="addAtom('Cl');"><button> Cl </button></a></td>                                                       
                 </tr>                
-                <tr><td colspan=6>Transition-Metals</td></tr>
-                <tr><td colspan=6>Rare-Earth-Metals</td></tr>
-                <tr><td colspan=6>Noble Gases</td></tr>  
+                <tr><td colspan=7>Transition-Metals</td></tr>
+                <tr><td colspan=7>Rare-Earth-Metals</td></tr>
+                <tr><td colspan=7>Noble Gases</td></tr>  
                 <tr>
                     <td><a onclick="addAtom('He');"><button> He </button></a></td>                      
                     <td><a onclick="addAtom('Ne');"><button> Ne </button></a></td>                                                  
@@ -129,29 +143,37 @@
             <div id="CrystalAtoms"></div>
             <HR>
             <a href="#calcSolid">
-            <button  type="button"> Start Calculation </button>
+            <button id="readyReport" type="button" disabled="true"> ==> Ready for Report </button>
             </a>
     
         </form>
 
-        <form id="calcSolid" class="panel" title="Calculate Solid" >
+        <form id="calcSolid" class="panel" title="Solid State Calculation" >
+            <h2>Introduction</h2>
+            <p>
+            We have investigated the electronic structure of the following solid by means
+            of a tight-binding bandstructure calculation. <br>
+            The TB approximaiton makes use of the fact, that the overlap integrals from  nearest 
+            neighbour interactions between atoms can be detmerined by a set of parameters. 
+            The follwong calculation uses the parametrization of Harrison.    
+            </p>
+
             <a onclick = "result = buildCrystal();">
-                <button  type="button"> Status of the calculation: </button>
+                <button  type="button"> Show the results: </button>
             </a>
 
             <HR>
             <div id="ReportCalc"></div>
             <HR>            
 
-            <p>Bandstructure:</p>
-            <canvas id="bandstructure" width="300" height="260" > </canvas>   
+            <h2>Bandstructure</h2>
+            <div id="BandCalc"></div>
+            <canvas id="bandstructure" > </canvas>   
+
             <p>Density-of-States</p>
-            <canvas id="densityofstates" width="300" height="260" > </canvas>   
+            <canvas id="densityofstates" > </canvas>   
 
         </form>
-
-
-
 
     <ul id="menue" class="panel" title="Universe Simulation" >
             
@@ -168,72 +190,19 @@
         </ul>
  
 
-    <form id="hubbledev" class="panel" title="Hubble Expansion" >
-        
-        <canvas id="time-expansion" width="300" height="260" > </canvas>
-        <p>
-        The graph shows the development of the Hubble constant during time.
-        Normally the Hubble Constant goes to a constant value over a long period.
-        This means, that the universe is expanding forever.
-        </p>
-        <li><a href="#distdev">Show Universe Size</a></li>
-    </form>
-
-    <form id="distdev" class="panel" title="Visible Size">
-
-        <canvas id="dist-expansion" width="300" height="260" > </canvas>
-
-        <p>
-            The graph shows the Hubble Distance and therefore the development of
-            the visible Size of the Universe in billion ly over time.
-            The velocity of the Objects rises with larger distance.
-            The space time at the edge of the universe take off with the
-            velocity of light, so the objects are no longer visible.
-         </p>
-        <li><a href="#scaledev">Show Scale Factor</a></li>
-    </form>
-
-    <form id="scaledev" class="panel" title="Scaling Factor">
-        <canvas id="asim-expansion" width="300" height="260" > </canvas>
-        <p>
-            The scaling factor describes the expansion of the universe over time.
-            Scaling factor equals one is the current state.
-            So you can determine the age of the uiverse where the graph crosses One.
-            <div id="unialter"></div>
-        </p>
-        <li><a href="#dscaledev">Show De-/Acceleration factor</a></li>
-    </form>
-
-    <form id="dscaledev" class="panel" title="De-/Acceleration factor">
-        <canvas id="adot-expansion" width="300" height="260" > </canvas>
-        <p>
-            The derivation of the scaling factor describes the accelerating
-            and decelerating phases of the universe.
-        </p>
-        <li><a href="#d2scaledev">Curvature of the Universe Expansion</a></li>
-    </form>
 
 
-    <form id="d2scaledev" class="panel" title="Expansion-Phase">
-        <canvas id="adot2-expansion" width="300" height="260" > </canvas>
-        <p>
-            The 2nd derivation of the scaling factor shows the transition from 
-            the decelerating to the accelerating expansion.
-            <div id="unislower"></div>
-        </p>
-        <li><a href="#compred">Compare with Red-Shift Data</a></li>
-    </form>
 
 
-    <form id="compred" class="panel" title="Experimental Data">
-            <canvas id="redshift-compare" width="300" height="260" > </canvas>
-            <p>
-                Here you can compare your theoretical Data with experimental
-                mesured Red-Shift Data und Hubble-Values.
-                <div id="huberror"></div>
-            </p>
-            <li><a href="#hubbledev">Show Hubble Expansion</a></li>
-    </form>
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
