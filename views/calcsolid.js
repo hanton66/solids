@@ -115,132 +115,7 @@ function setStructType(getType,getNum) {
 
 }
 
-function addAtom(getAtom) {
 
-    noAtom = noAtom + 1;
-
-    if (noAtom <= maxCompund) {
-
-    var nxtline = document.createElement('br');
-    var wrtline = document.createTextNode("Added " + getAtom + " to the structure.");
-    var element = document.getElementById('CrystalAtoms').appendChild(nxtline); 
-    var element = document.getElementById('CrystalAtoms').appendChild(wrtline);  
-    
-    if (getAtom == "H") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 1,
-                            "e_spd": [-0.233 ,  0.000,  0.000],
-                            "q_spd": [     1,       0,      0], 
-                            "ratom":  31, 
-                            "nexp": 2.0 };  
-    }
- 
-    if (getAtom == "He") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 2,
-                            "e_spd": [-0.570 ,  0.000,  0.000],
-                            "q_spd": [     2,       0,      0], 
-                            "ratom":  50, 
-                            "nexp": 2.0 };   
-    }  
-
-    if (getAtom == "Li") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 3,
-                            "e_spd": [-0.106 ,  0.000,  0.000],
-                            "q_spd": [     1,       0,      0], 
-                            "ratom": 152, 
-                            "nexp": 1.7 };  
-    }
-
-    if (getAtom == "Be") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 4,
-                            "e_spd": [-0.206 ,  0.000,  0.000],
-                            "q_spd": [     2,       0,      0], 
-                            "ratom": 111, 
-                            "nexp": 1.6 };  
-    }    
-  
-    if (getAtom == "B") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 5,
-                            "e_spd": [-0.344, -0.137,  0.000],
-                            "q_spd": [     2,       1,      0], 
-                            "ratom":  84, 
-                            "nexp": 1.6 };  
-    }
-    
-
-    if (getAtom == "C") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 6,
-                            "e_spd": [-0.500, -0.199,  0.000],
-                            "q_spd": [     2,       2,      0], 
-                            "ratom":  76, 
-                            "nexp": 1.7 };  
-    }
-
-
-    if (getAtom == "N") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 7,
-                            "e_spd": [-0.676, -0.266,  0.000],
-                            "q_spd": [     2,       3,      0], 
-                            "ratom":  71, 
-                            "nexp": 2.0 };  
-    }
-    
-    if (getAtom == "O") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 8,
-                            "e_spd": [-0.871 , -0.338,  0.000],
-                            "q_spd": [     2,       4,      0], 
-                            "ratom":  66, 
-                            "nexp": 2.0 };  
-    }     
-
-    if (getAtom == "F") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 9,
-                            "e_spd": [-1.087, -0.416,  0.000],
-                            "q_spd": [     2,       5,      0], 
-                            "ratom":  57, 
-                            "nexp": 1.5 };  
-    }
-
-    if (getAtom == "Ne") {
-        espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 3,
-                            "e_spd": [-1.323 , -0.498,  0.000],
-                            "q_spd": [     2,       6,      0], 
-                            "ratom":  50, 
-                            "nexp": 2.0 };  
-    }
-
-    }
-
-    if (noAtom > maxCompund) {
-        noAtom = noAtom - 1;
-        var nxtline = document.createElement('br');
-        var wrtline = document.createTextNode("Maximal number of Atoms reached.");
-        var element = document.getElementById('CrystalAtoms').appendChild(nxtline); 
-        var element = document.getElementById('CrystalAtoms').appendChild(wrtline);  
-    }
-
-    console.log (espdofz);
-}
-
-function delAtom() {
-    if (noAtom > 0) {
-    atomSort = espdofz[noAtom].atName
-    noAtom = noAtom - 1;
-    var nxtline = document.createElement('br');
-    var wrtline = document.createTextNode("Deleted the last Atom " + atomSort + ".");
-    var element = document.getElementById('CrystalAtoms').appendChild(nxtline); 
-    var element = document.getElementById('CrystalAtoms').appendChild(wrtline);
-    }
-}
 
 function buildCrystal() {
      var rt = 1; 
@@ -278,20 +153,20 @@ function buildCrystal() {
         }
         lmsum = lmsum +  power(e_at[iatom].lmax,2);  
 
-        var nxtline = document.createElement('br');
-        var element = document.getElementById('ReportCalc').appendChild(nxtline); 
-        var wrtline = document.createTextNode("The crystal has a " + atomSort + " Atom with valence energy " + form(eatom,3) + " ryd. ");
-        var element = document.getElementById('ReportCalc').appendChild(wrtline);
-        var wrtline = document.createTextNode("Using lmax " + e_at[iatom].lmax + ".");
-        var element = document.getElementById('ReportCalc').appendChild(wrtline);
+        var elemstr = "ReportCalc";
+        var txtstr = "The crystal has a " + atomSort 
+                        + " Atom with valence energy " 
+                        + form(eatom,3) + " ryd "
+                        +"using lmax " + e_at[iatom].lmax + ".";
+        txtout(txtstr,elemstr);
     }
     etotatom = form(etotatom,3);
-    var nxtline = document.createElement('br');
-    var element = document.getElementById('ReportCalc').appendChild(nxtline); 
-    var wrtline = document.createTextNode("The total atomic valence energy is " + etotatom + " ryd.");
-    var element = document.getElementById('ReportCalc').appendChild(wrtline);
-    var wrtline = document.createTextNode("We expecting " + lmsum + " eigenstates per k.");
-    var element = document.getElementById('ReportCalc').appendChild(wrtline);
+
+    var elemstr = "ReportCalc";
+    var txtstr = "The total atomic valence energy is " + etotatom 
+                    + " ryd. We expecting " + lmsum 
+                    + " eigenstates per k.";
+    txtout(txtstr,elemstr);
 
 
      console.log (atomPos);

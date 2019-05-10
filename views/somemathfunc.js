@@ -216,3 +216,12 @@ function form(x, z) {
     y = x / power(10, z);
     return y;
 }
+
+//
+//
+function txtout(txtstr,elemstr) {
+var nxtline = document.createElement('br');
+var element = document.getElementById(elemstr).appendChild(nxtline); 
+var wrtline = document.createTextNode(txtstr);
+var element = document.getElementById('ReportCalc').appendChild(wrtline);
+}
