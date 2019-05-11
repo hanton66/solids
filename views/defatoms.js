@@ -168,6 +168,17 @@ function addAtom(getAtom) {
                         }
 
 
+    if (getAtom == "Cu") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 29,
+                            "e_spd": [-0.172, 0.000,  -0.202],
+                            "q_spd": [     1,       0,     10], 
+                            "ratom":  128, 
+                            "nexp": 2.0 };  
+    }    
+
+
+
     if (getAtom == "Ga") {
         espdofz[noAtom] = { "atName": getAtom,
                             "atCharge": 31,
@@ -190,7 +201,7 @@ function addAtom(getAtom) {
 
     if (getAtom == "As") {
         espdofz[noAtom] = { "atName": getAtom,
-                            "atCharge": 32,
+                            "atCharge": 33,
                             "e_spd": [-0.523, -0.197,  0.000],
                             "q_spd": [     2,       3,      0], 
                             "ratom":  119, 

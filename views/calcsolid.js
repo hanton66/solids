@@ -127,28 +127,29 @@ function buildCrystal() {
 
     var elemstr = "ReportCalc"
     var txtstr = "We calculate a crystal of structure type " + strucType 
-                + "with " + numAtom + " atom(s) in the unit cell. " 
-                + "The atoms are of " + maxCompund + " different compund(s)."
+                + " with " + numAtom + " atom(s) in the unit cell. " 
+                + " The atoms are of " + maxCompund + " different compund(s). "
                 + " The crystal form is " + crystForm;
     txtout(txtstr, elemstr);
 
     console.log(maxCompund);
      for (iatom = 1; iatom <= numAtom; iatom++ ) {
-        e_at[iatom] = {"No":1, "sort:": 1, "erg": [0,0,0], "lmax": 2}; 
+        e_at[iatom] = {"No":1, "sort:": 1, "erg": [0,0,0], "lmax": 2, "pointer": lmsum}; 
         console.log (espdofz[iatom]);
 
         isort = atomPos[iatom].Sort
         atomSort = espdofz[isort].atName;
         e_at[iatom].erg[0] = espdofz[isort].e_spd[0];
         e_at[iatom].erg[1] = espdofz[isort].e_spd[1];
-        e_at[iatom].erg[2] = espdofz[isort].e_spd[2];              
+        e_at[iatom].erg[2] = espdofz[isort].e_spd[2];  
+        
         eatom =   e_at[iatom].erg[0]*espdofz[isort].q_spd[0] 
                 + e_at[iatom].erg[1]*espdofz[isort].q_spd[1] 
                 + e_at[iatom].erg[2]*espdofz[isort].q_spd[2];
         nvalat = espdofz[isort].q_spd[0] + espdofz[isort].q_spd[1] +espdofz[isort].q_spd[2];   
         etotatom = etotatom + eatom;
         nvalence = nvalence + nvalat; 
-        if (e_at[iatom].erg[2] < 0) {
+        if (e_at[iatom].erg[2] != 0) {
             e_at[iatom].lmax  = 3;
         }
         lmsum = lmsum +  power(e_at[iatom].lmax,2);  
@@ -157,7 +158,7 @@ function buildCrystal() {
         var txtstr = "The crystal has a " + atomSort 
                         + " Atom with valence energy " 
                         + form(eatom,3) + " ryd "
-                        +"using lmax " + e_at[iatom].lmax + ".";
+                        +" using lmax " + e_at[iatom].lmax + ".";
         txtout(txtstr,elemstr);
     }
     etotatom = form(etotatom,3);
@@ -165,7 +166,7 @@ function buildCrystal() {
     var elemstr = "ReportCalc";
     var txtstr = "The total atomic valence energy is " + etotatom 
                     + " ryd. We expecting " + lmsum 
-                    + " eigenstates per k.";
+                    + " eigenstates per k. ";
     txtout(txtstr,elemstr);
 
 
@@ -235,6 +236,7 @@ var T = [t1,t2,t3];
 var volume = numeric.det(T);
 
 var elemstr = "ReportCalc";
+txtout("",elemstr);
 var txtstr = "The real lattice vectors T are defined as " 
                 + "{ [" + t1 + "] / [" + t2 + "] / [" + t3 + "] }.";
 txtout(txtstr,elemstr);
@@ -354,7 +356,9 @@ console.log("aest",aest);
 alat = maxM(aest)/100/anull;
 console.log("Lattice Constant:",alat*anull);
 
+
 var elemstr = "ReportCalc";
+txtout("",elemstr);
 var txtstr = "From the investigation of the super cell of 27 neighbour unit cells, " 
             + "we determine that the smallest distance is " + form(totmin,3) + " fractional units. "
             + "This leads to an effective coordination number of  " + form(near[1],1) 
@@ -468,8 +472,10 @@ for (ik=0; ik < nkband; ik++) {
                                     jlv = jlv + 1;
                                     pv = isequal(il,jl)*isequal(im,jm);
                                     dr = 1/power(sr[iaa].dd,pdr[il][jl]);
-                                    ialm = (iat-1)*power(e_at[iat].lmax,2) + imat - 1;
-                                    jalm = (jat-1)*power(e_at[jat].lmax,2) + jmat - 1;
+//                                    ialm = (iat-1)*power(e_at[iat].lmax,2) + imat - 1;
+ //                                   jalm = (jat-1)*power(e_at[jat].lmax,2) + jmat - 1;
+                                    ialm = e_at[iat].pointer + imat - 1;
+                                    jalm = e_at[jat].pointer + jmat - 1;
                                     Esig = dr*sr[iaa].srd*Ylm[il][im]*Ylm[jl][jm]*Vsig[il][jl]*g00[1]*sqrt((4/near[iat]));
                                     Epi0 = dr*sr[iaa].srd*(pv - Ylm[il][im]*Ylm[jl][jm])*Vpi0[il][jl]*g00[1]; 
                                     Elmg00r[ialm][jalm] = Elmg00r[ialm][jalm] + Esig + Epi0;
@@ -651,20 +657,50 @@ console.log ("DOS",dosfit,dlabel);
 //       rn = numeric.diag(rn);
 //   }
 
+//
+// Calculate some physical Properties
+var alatA = alat*anull
+var molmasse = 0;
+for (iatom = 1; iatom <= numAtom; iatom++) {
+    isort = atomPos[iatom].Sort
+    var atomchg = espdofz[isort].atCharge;
+    molmasse = molmasse + 0.0063*atomchg*atomchg + 2.0886*atomchg -  1.3453;
+} 
+var volnull = volume*power(alatA,3);
+var dichte = molmasse/volnull*kgprol;
+var elemstr = "ReportCalc";
+txtout("",elemstr);
+var txtstr = "The molare mass of the compound is about " 
+                + form(molmasse,2) + " g/mol."
+                + " The equlibrium volume of the unit cell is " + form(volnull,2) + " A^3. "
+                + " That leads to a mass density of the compund of " + form(dichte,3) + " kg/l. ";
+txtout(txtstr,elemstr);
+
+
+//eatom = eatom/ehart
+//chargeint = sum(qvalnl(:,1)  + qvalnl(:,2).*0.33) %+ qvalnl(:,3).*(10-qvalnl(:,3))/12)
+//rhoint = chargeint/volnull
+//evalence = sum((efspace+efermi).*dosfit.*eweight)*defbox
+
+
+//
 // plot Bandstructure
 var lineChartData = {
     labels: eval(blable),
     datasets: [
         {
             fillColor: "rgba(255, 255, 255, 0)",
-            strokeColor: "rgba(000,000,000,1)",
+            strokeColor: "rgba(000,255000,1)",
             data: eval(eevk[0])
         }
     ]
 }
 
 for (il = 1; il <= lmsum; il++) {
-    lineChartData.datasets[il] = {"data": eevk[il] };
+    lineChartData.datasets[il] = {strokeColor: "rgba(000,255,000,1)", "data": eevk[il] };
+    if (il > nvalence/2-1) {
+        lineChartData.datasets[il] = {strokeColor: "rgba(255,000,000,1)", "data": eevk[il] };
+    }
 }
 var myLine = new Chart(document.getElementById("bandstructure").getContext("2d")).Line(lineChartData);
 
@@ -672,7 +708,7 @@ var barChartData = {
     labels : eval(dlabel),
     datasets : [
         {
-            fillColor : "rgba(000,000,000,1)",
+            fillColor : "rgba(255,255,255,1)",
             strokeColor : "rgba(45,53,65,1)",
 //            highlightFill: "rgba(220,220,220,0.75)",
 //            highlightStroke: "rgba(220,220,220,1)",
