@@ -31,6 +31,9 @@
               width: 100%; 
               height: auto;	
             }
+            button {
+                font-size: 16px
+            }
 
     </style>
 
@@ -100,17 +103,15 @@
     <form id="setAtoms" class="panel" title="Select Elements" >
 
             <table width="95%">
-                <tr><td colspan=7>Semi-Metals</td></tr>
+                <tr><td colspan=6>Semi-Metals</td></tr>
                 <tr>
-                    <td><a onclick="addAtom('B');"><button> B </button></a></td>
                     <td><a onclick="addAtom('C');"><button> C </button></a></td>   
-                    <td><a onclick="addAtom('Si');"><button> Si </button></a></td>
-                    <td><a onclick="addAtom('P');"><button> P </button></a></td>                                              
+                    <td><a onclick="addAtom('Si');"><button> Si </button></a></td>                                          
                     <td><a onclick="addAtom('Ga');"><button> Ga </button></a></td>
                     <td><a onclick="addAtom('Ge');"><button> Ge </button></a></td>
                     <td><a onclick="addAtom('As');"><button> As </button></a></td>                    
                 </tr>
-                <tr><td colspan=7>Metals</td></tr>
+                <tr><td colspan=6>Metals</td></tr>
                 <tr>                  
                         <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
                         <td><a onclick="addAtom('Be');"><button> Be </button></a></td>   
@@ -118,21 +119,25 @@
                         <td><a onclick="addAtom('Mg');"><button> Mg </button></a></td> 
                         <td><a onclick="addAtom('Al');"><button> Al </button></a></td>                                                                            
                     </tr>
-                <tr><td colspan=7>Non-Metals</td></tr>
+                <tr><td colspan=6>Non-Metals</td></tr>
                 <tr>
                         <td><a onclick="addAtom('H');"><button> H </button></a></td>
+                        <td><a onclick="addAtom('B');"><button> B </button></a></td>                        
                         <td><a onclick="addAtom('N');"><button> N </button></a></td>
                         <td><a onclick="addAtom('O');"><button> O </button></a></td>     
-                        <td><a onclick="addAtom('F');"><button> F </button></a></td>   
+                        <td><a onclick="addAtom('F');"><button> F </button></a></td>
+                </tr>
+                <tr>
+                        <td><a onclick="addAtom('P');"><button> P </button></a></td>                               
                         <td><a onclick="addAtom('S');"><button> S </button></a></td> 
                         <td><a onclick="addAtom('Cl');"><button> Cl </button></a></td>                                                       
                 </tr>                
-                <tr><td colspan=7>Transition-Metals</td></tr>
+                <tr><td colspan=6>Transition-Metals</td></tr>
                 <tr>
                     <td><a onclick="addAtom('Cu');"><button> Cu </button></a></td> 
                 </tr>
-                <tr><td colspan=7>Rare-Earth-Metals</td></tr>
-                <tr><td colspan=7>Noble Gases</td></tr>  
+                <tr><td colspan=6>Rare-Earth-Metals</td></tr>
+                <tr><td colspan=6>Noble Gases</td></tr>  
                 <tr>
                     <td><a onclick="addAtom('He');"><button> He </button></a></td>                      
                     <td><a onclick="addAtom('Ne');"><button> Ne </button></a></td>                                                  
