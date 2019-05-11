@@ -24,6 +24,13 @@ function exp(x) {
     return y;
 }
 //
+// log-Funktion
+function log(x) {
+    var y;
+    y = Math.log(x);
+    return y;
+}
+//
 // complex exponteial funktion y=exp(i*x)
 function expi(x) {
 var y=[];
@@ -64,11 +71,12 @@ function diff2(fofr, r, ngo, cmulti) {
     return d2fdr2;
 }
 
-function chkCross(fofr,r,ngo,refval) {
+function chkCross(fofr,r,refval) {
     var rcross = 0.0;
     var dr = 0.0;
     var dall = 0.0;
     var dfofr = 0.0;
+    var ngo = fofr.length;
     for (igo = 0; igo < ngo; igo++) {
         if (fofr[igo] < refval) {
             if (fofr[igo+1] > refval) {
@@ -194,7 +202,7 @@ function maxM(x_in) {
 }
 
 //
-// get the sum of all values of vector
+// get the sum of all absolute values of matrix
 function sumaM(x_in) {
     var y = 0; 
     var lt=x_in.length;
@@ -202,6 +210,20 @@ function sumaM(x_in) {
     for (igo = 0; igo < lt; igo++) {
         for (jgo = 0; jgo < lt; jgo ++) {
             y = y + Math.abs(x_in[igo][jgo])
+        }
+    }
+    return y;
+}
+
+//
+// Check symmetrie of the matrix
+function chkMatSy(x_in) {
+    var y = 0; 
+    var lt=x_in.length;
+    var y = 0.0;
+    for (igo = 0; igo < lt; igo++) {
+        for (jgo = igo+1; jgo < lt; jgo ++) {
+            y = y + Math.abs(x_in[igo][jgo] + x_in[jgo][igo]); 
         }
     }
     return y;
@@ -220,8 +242,6 @@ function form(x, z) {
 //
 //
 function txtout(txtstr,elemstr) {
-var nxtline = document.createElement('br');
-var element = document.getElementById(elemstr).appendChild(nxtline);
 var nxtline = document.createElement('br');
 var element = document.getElementById(elemstr).appendChild(nxtline); 
 var wrtline = document.createTextNode(txtstr);

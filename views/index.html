@@ -115,7 +115,7 @@
                         <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
                         <td><a onclick="addAtom('Be');"><button> Be </button></a></td>   
                         <td><a onclick="addAtom('Na');"><button> Na </button></a></td> 
-                        <td><a onclick="addAtom('Ca');"><button> Ca </button></a></td> 
+                        <td><a onclick="addAtom('Mg');"><button> Mg </button></a></td> 
                         <td><a onclick="addAtom('Al');"><button> Al </button></a></td>                                                                            
                     </tr>
                 <tr><td colspan=7>Non-Metals</td></tr>
@@ -166,14 +166,29 @@
             </a>
 
             <HR>
+            <h2>Crystal Structure</h2>                
             <div id="ReportCalc"></div>
             <HR>            
 
-            <h2>Bandstructure</h2>
-            <div id="BandCalc"></div>
+            <h2>Electronic Structure</h2>
+            <div id="ElecCalc"></div>
 
-            <canvas id="bandstructure" width="300" height="300"> </canvas>   
-            <canvas id="densityofstates" width="300" height="300"> </canvas>   
+            <h3>Band Structure</h3>
+            <div id="BandCalc"></div>            
+            <canvas id="bandstructure" width="300" height="400"> </canvas> 
+            <div id="BandCalc2"></div>              
+
+            <h3>Density-of-States</h3>
+            <div id="DosCalc"></div>
+            <canvas id="densityofstates" width="300" height="200"> </canvas>   
+            <div id="DosCalc2"></div>            
+            <HR>  
+
+            <h2>Physical Properties</h2>
+            <div id="PhysCalc"></div>
+            <canvas id="debyetemp" width="300" height="300"> </canvas>   
+            <div id="PhysCalc2"></div>            
+
 
         </form>
 

@@ -11,6 +11,7 @@ var atomPos = [];
 var espdofz = [];
 var e_at = [];
 var nvalence = 0;
+var nexpanh = 0;
 //
 // for plotting
 var blable = ["1","2","3","4"]
@@ -95,6 +96,18 @@ function setStructType(getType,getNum) {
         atomPos[2] =  { "Sort": 2 , "Pos":[ 0.25 , 0.25, 0.25]};           
     }
 
+    if (strucType == "C3") {
+        numAtom = 6;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.25 , 0.25, 0.25]}; 
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.25 , 0.75, 0.75]}; 
+        atomPos[3] =  { "Sort": 1 , "Pos":[ 0.75 , 0.25, 0.75]}; 
+        atomPos[4] =  { "Sort": 1 , "Pos":[ 0.75 , 0.75, 0.25]};
+        atomPos[5] =  { "Sort": 2 , "Pos":[ 0.00 , 0.00, 0.00]}; 
+        atomPos[6] =  { "Sort": 2 , "Pos":[ 0.50 , 0.50, 0.50]};                  
+    }
+
+
 
     if (strucType == "Gas") {
         numAtom = 2;
@@ -149,6 +162,7 @@ function buildCrystal() {
         nvalat = espdofz[isort].q_spd[0] + espdofz[isort].q_spd[1] +espdofz[isort].q_spd[2];   
         etotatom = etotatom + eatom;
         nvalence = nvalence + nvalat; 
+        nexpanh  = nexpanh + espdofz[isort].nexp;
         if (e_at[iatom].erg[2] != 0) {
             e_at[iatom].lmax  = 3;
         }
@@ -158,7 +172,9 @@ function buildCrystal() {
         var txtstr = "The crystal has a " + atomSort 
                         + " Atom with valence energy " 
                         + form(eatom,3) + " ryd "
-                        +" using lmax " + e_at[iatom].lmax + ".";
+                        +" using lmax a maximum angular momentum of" + e_at[iatom].lmax + "."
+                        +" The fractional atom position in the unit cell is at { " 
+                        + atomPos[iatom].Pos + " } .";
         txtout(txtstr,elemstr);
     }
     etotatom = form(etotatom,3);
@@ -203,8 +219,8 @@ if (crystForm == "fcc") {
     var t2 = [0.5, 0.0, 0.5];
     var t3 = [0.5, 0.5, 0.0];
     var APoint = [0.5, 0.5, 0.5];  // L
-    var BPoint = [0.0, 1.0, 0.0];  // X
-    var CPoint = [0.5, 0.5, 0.0];  // K
+    var BPoint = [0.0, 1.0, 0.0];  // X 
+    var CPoint = [0.5, 0.5, 0.0];  // K       
     var blable = ["L","G","X","K"];
     var b1titel = "Bandindex L - G - X - K";
  }
@@ -359,7 +375,7 @@ console.log("Lattice Constant:",alat*anull);
 
 var elemstr = "ReportCalc";
 txtout("",elemstr);
-var txtstr = "From the investigation of the super cell of 27 neighbour unit cells, " 
+var txtstr = "From the investigation of the super cell of 26 neighbour unit cells, " 
             + "we determine that the smallest distance is " + form(totmin,3) + " fractional units. "
             + "This leads to an effective coordination number of  " + form(near[1],1) 
             + " for the first atom etc. Under the assumptions, that the neighbour atoms "
@@ -454,8 +470,8 @@ for (ik=0; ik < nkband; ik++) {
 
                     var imat = 0;
                     var ilv = 0;  
-                    console.log ("bloch",g00,dl,dm,dn,sr[iaa].dd);                       
-                    console.log ("harmonics",Ylm)                    
+//                    console.log ("bloch",g00,dl,dm,dn,sr[iaa].dd);                       
+//                    console.log ("harmonics",Ylm)                    
 //                   console.log("Atom:",e_at);                
                     for (var il=0; il < e_at[iat].lmax; il++ ) {
                         var ilm = 2*(il+1) - 1;
@@ -472,8 +488,6 @@ for (ik=0; ik < nkband; ik++) {
                                     jlv = jlv + 1;
                                     pv = isequal(il,jl)*isequal(im,jm);
                                     dr = 1/power(sr[iaa].dd,pdr[il][jl]);
-//                                    ialm = (iat-1)*power(e_at[iat].lmax,2) + imat - 1;
- //                                   jalm = (jat-1)*power(e_at[jat].lmax,2) + jmat - 1;
                                     ialm = e_at[iat].pointer + imat - 1;
                                     jalm = e_at[jat].pointer + jmat - 1;
                                     Esig = dr*sr[iaa].srd*Ylm[il][im]*Ylm[jl][jm]*Vsig[il][jl]*g00[1]*sqrt((4/near[iat]));
@@ -481,17 +495,9 @@ for (ik=0; ik < nkband; ik++) {
                                     Elmg00r[ialm][jalm] = Elmg00r[ialm][jalm] + Esig + Epi0;
                                     Esigi = dr*sr[iaa].srd*Ylm[il][im]*Ylm[jl][jm]*Vsig[il][jl]*g00[2]*sqrt((4/near[iat]));
                                     Epi0i = dr*sr[iaa].srd*(pv - Ylm[il][im]*Ylm[jl][jm])*Vpi0[il][jl]*g00[2]; 
-                                    Elmg00i[ialm][jalm] = Elmg00i[ialm][jalm] + Esigi + Epi0i;                             
-                             //       console.log (imat,jmat,Esig,Epi0);
-                                    if (il == 1) { if (im == 2) { if (jl == 1){ if (jm == 0) { 
-                    
-                                    console.log ("Epi",Epi0,"dr",dr,"sr",sr[iaa].srd,"py1y2",(pv - Ylm[il][im]*Ylm[jl][jm]),"Vs",Vpi0[il][jl],"g00",g00[1],"sqrn",sqrt((4/near[iat])));                                    
-                                    }}}}
-                                    //                                        Elmg00(iat,ilv,jat,jlv,ik) = Elmg00(iat,ilv,jat,jlv,ik) + dr*sr(iat,jat,iq)*psk(ilv,jlv)*Vpi0(il,jl)*g00 //*(4/near(iat))^0.5                                      
-
-//console.log(imat,jmat,iat,jat,ialm,jalm,Esig,Epi0);  
-//console.log("dr",dr,"sr-dd",sr[iaa].dd,"ylm",Ylm[il][im]*Ylm[jl][jm],"Vsig",Vsig[il][jl],"Vpi",Vpi0[il][jl],"g00",g00[1],"damp",sqrt((4/near[iat])));                                                                      
-                                }
+                                    Elmg00i[ialm][jalm] = Elmg00i[ialm][jalm] + Esigi + Epi0i;
+//    in the case of Salte-Koster => dr*sr(iat,jat,iq)*psk(ilv,jlv)*Vpi0(il,jl)*g00                                      
+                               }
                             }
                         }
                     }                      
@@ -501,56 +507,46 @@ for (ik=0; ik < nkband; ik++) {
             }
         }
     }
-    console.log ("Matrixelement Rea",Elmg00r);
-    console.log ("Matrixelement Img",Elmg00i); 
-    console.log ("Matrixelement tot",Elmg00);    
-    var sumup = 0; sumdn = 0; 
-    var Elmchk = numeric.sub(Elmg00r,Elmg00i);
-    for (igo = 0; igo < lmsum; igo++) {
-            for (jgo = igo+1; jgo < lmsum; jgo++ ) {
-                sumup = sumup + Math.abs(Elmchk[igo][jgo]);
-                sumdn = sumdn + Math.abs(Elmchk[jgo][igo]);
-            }
+//
+// Now we solve the Eigen equation of the atomic states
+// Unfortunately we can only calculate eigenvalues from real matirx.
+// Therfore we gather the imaginery elements but them as shift to
+// the valence band (-corr) and conduction band (+corr) for non-symm Matrices.
+// For antisymmetric Matrix we assume that H* = real(H) + imag(H) delivers similar 
+// eigenvalues like H
+    var Elmg00 = numeric.add(Elmg00r,Elmg00i);
+    var matSym = chkMatSy(Elmg00);
+    if (matSym < 0.001) {
+        var Solv = numeric.eig(Elmg00);
+        var eeigr = Solv.lambda.x; 
+        var eeigi = Solv.lambda.y;  
+        if (eeigi == null) {
+            eeigi = numeric.rep([lmsum],0);
+        }           
+        var eeig = sortV(numeric.add(eeigr,eeigi));                  
     }
-    console.log ("test Upper",sumup,sumdn,Elmchk)
+    if (matSym > 0.001) {
+        var Solv = numeric.eig(Elmg00r); 
+        var eeigr = Solv.lambda.x;     
+        var eeig = sortV(eeigr);                 
+    }   
+
     var corr = 0.0;
-    if (sumup*sumdn < 0.001 ) {
-        corr = sumaM(Elmg00i)/lmsum/lmsum*2;
-        Elmg00i = numeric.rep([lmsum,lmsum],0);
-    }
-
-
-    Elmg00 = numeric.add(Elmg00r,Elmg00i);
-    var Solv = numeric.eig(Elmg00); 
-    var eeigr = Solv.lambda.x;
-    var eeigi = Solv.lambda.y;
-    if (eeigi == null) {
-        eeigi = numeric.rep([lmsum,],0);
-    }
-    console.log ("Matrixelement er,ei",eeigr,eeigi);    
-
-    var eeig = sortV(numeric.add(eeigr,eeigi));     
+    corr = sumaM(Elmg00i)/lmsum/lmsum;    
     for (igo = 0; igo < lmsum; igo++) {
             eeig[igo] = eeig[igo] - corr;
             if (igo > lmsum/2-1) {
-                eeig[igo] = eeig[igo] + 2*corr;
+                eeig[igo] = eeig[igo] + corr;
             }
     }
     console.log ("Matrixelement Erg",eeig,corr,Solv);
-  
-
-//    var Solvi = numeric.eig(Elmg00i); 
-//    var eeigi = sortV(Solvi.lambda.x);
-//    console.log ("Matrixelement Ergi",eeigi,Solvi);
     
     for (irun = 0; irun < lmsum; irun++) {
         eev[ik][irun] = eeig[irun]/ehart;
     }
  //
- // transpose for plotting and analyzing   
+ // transpose energie values for plotting and analyzing   
     var eevk = numeric.transpose(eev);
-    console.log ("Matrixelement eev",eev);
-    console.log ("Matrixelement eevk",eevk);
 //
 // search for Fermi energy (rough) at Gamma-Point
     var nfermi = Math.floor(nvalence/2)-1;
@@ -562,7 +558,26 @@ for (ik=0; ik < nkband; ik++) {
     }
     var gapdirect = eev[1][nfermi+1] - eev[1][nfermi];
     var efermi = (eev[1][nfermi+1] + eev[1][nfermi])/2;
-    console.log ("Fermi-Energie",efermi,"nfermi",nfermi,"bandgap", gapdirect);
+
+
+    var elemstr = "BandCalc";
+    txtout("",elemstr);
+    var txtstr =  "The following line chart shows the bandstructure of the compound."
+                + " Occupied valence bands are in green. Unoccupied conduction bands are in red. "
+                + " The energy scale in the plot is set to Fermi-Energy = 0 eV"; 
+    txtout(txtstr,elemstr);
+    txtout("",elemstr);
+
+    var elemstr = "BandCalc2";
+    txtout("",elemstr);
+    var txtstr =  "We evaluate the electronic structure of the Gamma-Point in the "
+                + " middle of the Brillouin-Zone. The direct band gap is " + form(gapdirect,2)     
+                + " eV. There are " + form(nfermi+1,0) + " valence bands occupied with " 
+                + nvalence + " electrons. The Fermi energy would be about " + form(efermi,2) + " eV. ";
+    txtout(txtstr,elemstr);
+    var txtstr =  " The deepest electronic band lies about " + form(eev[1][0]-efermi,2) + " eV."; 
+    txtout(txtstr,elemstr);
+
 
 //
 // Calculate the DOS by linear interpolation of the 4 k-Points
@@ -596,6 +611,19 @@ for (irun =1; irun <= nmix; irun++) {
     }
 }
 
+var elemstr = "DosCalc";
+txtout("",elemstr);
+var txtstr =  " We have approximate the density-of-state (DOS) for the compound by linear interpolation "
+            + " of the energye values from the k-Point evaluation. We assume, that the four "
+            + " k-points in our plot roughly describe the four corners of a the Brillouin segemnt. "
+            + " Withn this segemnt we run from Gamma to the face of the three remaining k-Points. "
+            + " This is like going from the center of a sphere to the surface and meanns that the "
+            + " weight of the calulated outer inertpolated energy values are higher with k-square, "
+            + " whereas k means the absolute value of k-vector. The following bar chart shows the "
+            + " calculated DOS of the investigated compund.";
+txtout(txtstr,elemstr);
+
+
 //
 // Fermi again but now more accurate
 var ndos = jdos;
@@ -610,31 +638,33 @@ if (isequal(nfermi,ndos)) {
 var efermi = (efsort[nfermi] + efsort[nfermi+1])/2;
 var bandgap = efsort[nfermi+1]-efsort[nfermi];
 var bandwidth = efsort[1] - efermi + bandgap/2
-console.log("DOS", ekkfit);
-console.log("EFermi", efermi,"bandgap",bandgap,"Bandwidth", bandwidth);
+// console.log("DOS", ekkfit);
+// console.log("EFermi", efermi,"bandgap",bandgap,"Bandwidth", bandwidth);
 //
 // Set the Fermi-Energy to zero
 efsort = numeric.sub(efsort,efermi);
 eevk = numeric.sub(eevk,efermi);
-console.log("DOS", efsort);
+// console.log("DOS", efsort);
 var emaxx = maxV(efsort);
 var eminx = minV(efsort);
 var eminy = Math.floor(eminx/5)*5;
 var emaxy = Math.ceil(emaxx/5)*5;
 //
 // Calulate the DOS withni a mesh of approriate size
-console.log("Emins", eminx,eminy,"Emaxs",emaxx,emaxy);
+// console.log("Emins", eminx,eminy,"Emaxs",emaxx,emaxy);
 var mesh = 100;
-var defbox = (emaxx-eminx)/mesh;
+//var defbox = (emaxx-eminx)/mesh;
+var defbox = (emaxy-eminy)/mesh;
 var dosfit = hist(efsort,mesh);
 normdos = sumV(dosfit)/(lmsum*2)*defbox;
 dosfit = numeric.div(dosfit,normdos);
 console.log ("Norm:",normdos,sumV(dosfit),sumV(dosfit)*defbox);
 //
-//  For plotting set energy labels 
-var dlabel = []; dlabel[0] = form(eminy,1);
+//  For plotting set energy labels and build an energy mesh
+var dlabel = []; efspace=[]; dlabel[0] = form(eminy,1);
 for (igo = 0; igo < mesh; igo++) {
     dlabel[igo] = ""; 
+    efspace[igo] = igo*defbox + eminy;
 }
 var nlabel = Math.floor((emaxy-eminy)/5);
 var ntebox = Math.floor(mesh/nlabel);
@@ -643,7 +673,70 @@ for (igo = 1; igo <= nlabel; igo++) {
 }
 dlabel[0] = form(eminy,1);
 //dlabel[mesh-1] = form(emaxy,1);
-console.log ("DOS",dosfit,dlabel);
+console.log ("DOS",dosfit,dlabel,efspace);
+
+//
+// Searching for the Fermi-Level in th DOS
+var dosatef = 0;
+for (igo = 0; igo < mesh-1; igo++ ) {
+    if (efspace[igo] < 0) {
+        if (efspace[igo+1] > 0) {
+           dosatef = (dosfit[igo]+dosfit[igo+1])/2;
+           nfermi = igo;
+           console.log("DOS,nf",dosatef,nfermi)
+        }
+    }
+    if (efspace[igo] == 0) {       
+        dosatef = dosfit[igo];
+        nfermi = igo;      
+    }   
+}
+
+var gapratio = bandgap/gapdirect
+var substtype = " metal";
+var gaptype = "a";
+if (isequal(dosatef,0)) {
+    substtype = "n insulator";
+    if (bandgap < 2.5) {
+       substtype = " semiconductor";
+        gaptype = "a direct";
+        if (gapratio < 1) {
+            gaptype = 'an indirect';
+        }
+    }
+}
+
+
+var elemstr = "DosCalc2";
+txtout("",elemstr);
+var txtstr =  " The DOS shows the calculated energy values in a range from " + form(eminx,2) 
+            + " eV in the valence band to " + form(emaxx,2) + " eV in the conduction band";
+txtout(txtstr,elemstr);
+var txtstr =  " We can now determine the Fermi-Energy more accurate because no all k-Points are "
+            + " involved. The Fermi-Energy determined from the DOS lies about " + form(efermi,2) + " eV. "
+            + " The total bandwidth of the valence band can be determined to " + form(bandwidth,2) + " eV. "
+            + " The band gap analysis od the DOS results in a gap of " + form(bandgap,2) + " eV."
+            + " The charge density at the Fermi-Energy is " + form(dosatef,2) + " e-/eV. "
+            + " The compund seems to be " + gaptype + substtype + ".";
+txtout(txtstr,elemstr);
+
+
+//
+// Now we calculate the bonding energy in the crysatl according
+// to the Fermi-Dirac Statistics (here at 1 Kelvin)
+var eweight = [];
+var evalence = 0; 
+for (igo = 0; igo < mesh; igo++) {
+    eweight[igo] = 1.0/(exp(efspace[igo]/(kboltz*1))+1);
+    evalence = evalence + (efspace[igo]+efermi)*dosfit[igo]*eweight[igo];
+}
+evalence = evalence*defbox;
+etotatom = etotatom/ehart;  // Changing from ryd to eV
+ebond = evalence - etotatom;
+console.log ("Valence bond enr",ebond )
+
+
+
 
 //    var  A = [[1,0,1],[0,2,0],[0.3,0,1]]; Am = A;
 //    var u  = sqrt(numeric.norm2(A));
@@ -668,13 +761,101 @@ for (iatom = 1; iatom <= numAtom; iatom++) {
 } 
 var volnull = volume*power(alatA,3);
 var dichte = molmasse/volnull*kgprol;
-var elemstr = "ReportCalc";
+
+
+var nexp = -nexpanh/numAtom;
+var rwigner = power(3*volnull/4/pi/numAtom,1/3);
+var bulkmodul = -gpa*ebond/volnull*power((nexp+1),2);
+var betab = bulkmodul/gpa;
+var shearmodul = 0.4*bulkmodul;
+var c11modul = bulkmodul+4/3*shearmodul;
+var youngmodul = 9*bulkmodul*shearmodul/(3*bulkmodul+shearmodul);
+var debye = 177.5*power(numAtom,1/3)*power(volnull,1/6)*sqrt(bulkmodul/molmasse);
+var vlwav = sqrt((3*bulkmodul+4*shearmodul)/(3*dichte))*mpros;
+var vtwav = sqrt(shearmodul/dichte)*mpros;
+var schall = power(1/3*(2/power(vtwav,3)+1/power(vlwav,3)),(-1/3));
+var Enull = -betab*volnull/power(nexp+1,2)/numAtom;
+var ediss = -Enull 
+var rhoint=power(bulkmodul/1900,3/5);
+var grueneisen= -1/6-nexp 
+var mohs = 10*sinh(2*bulkmodul/500)+0.2
+var vdiss =exp(-1/nexp+log(volnull))
+// var tschmelz = 3e-5*power(debye,2)*power((volnull/numAtom),(2/3))*molmasse/Nnu
+
+var elemstr = "PhysCalc";
+txtout("",elemstr);
+var txtstr = " From the total valence energy calculation of the DOS we try to estimate a number of"
+            + " physical properties. First of all we can assume from the atomic composition same basic "
+            + " static properties."; 
+txtout(txtstr,elemstr);
 txtout("",elemstr);
 var txtstr = "The molare mass of the compound is about " 
                 + form(molmasse,2) + " g/mol."
                 + " The equlibrium volume of the unit cell is " + form(volnull,2) + " A^3. "
                 + " That leads to a mass density of the compund of " + form(dichte,3) + " kg/l. ";
 txtout(txtstr,elemstr);
+txtout("",elemstr);
+var txtstr = " Using an equation of state, we can determine from the energy/volume relation "
+            + " other meachnical, thermal and elastic properties. The bonding energy per unit cell "
+            + " is about" + form(ebond,2) + " eV, which is roughly a dsissoziation energy of"
+            + form(Enull,1) + " kj/mol.";
+txtout(txtstr,elemstr);
+var txtstr = " The bulk modulus is " + form(bulkmodul,1) + " GPa. The other eleastic constants "
+            + " from mixed polycrystalline material can be approximated. The shearmodul is "
+            + form(shearmodul,1) + " GPa and the Young moduls is " + form(youngmodul,1) + "GPa "
+            + " the tetragonal shear modul is " + form(c11modul,1) + " GPa.";
+txtout(txtstr,elemstr);
+var txtstr = " The Deby temperature of this compound is " + form(debye,1) + " K. "
+            + " The veloyity of sound is " + form(schall,1) + " m/s with a transversal part "
+            + " of " + form(vtwav,1) + " m/s and a logituidinal part of " + form(vlwav,1) + " m/s.";          ;
+txtout(txtstr,elemstr);
+
+
+
+console.log (rwigner, nexp);
+console.log (bulkmodul, shearmodul, c11modul, youngmodul);
+console.log (debye, vlwav,vtwav,schall,Enull, grueneisen, mohs,vdiss);
+
+//
+// now we calculate some thermal properties
+var Tmax = 600; Tmin = 10; tspace=[]; cvt=[]; xdt = []; mesh = 20;
+for (igo = 0; igo < mesh; igo++) {
+    tspace[igo] = form(Tmin + (Tmax-Tmin)/(mesh-1)*igo,0);
+}
+var meanmol = molmasse/numAtom;
+for (igo = 0; igo < mesh; igo++) {
+    var sumxdt = 0;
+    for (jgo = 0; jgo < mesh; jgo++) {
+        xdt[jgo] = debye/tspace[igo]/1000 +  (debye/tspace[igo] - debye/tspace[igo]/1000)/(mesh-1)*jgo;
+        sumxdt = sumxdt + power(xdt[jgo],4)*exp(xdt[jgo])/power(exp(xdt[jgo])-1,2);
+    }
+    dtx = xdt[1] - xdt[0]; 
+    cvt[igo] = 9*rgas*power((tspace[igo]/debye),3)*sumxdt*dtx/meanmol*1000;
+    if (tspace[igo] < 293) {
+        var cvrt = cvt[igo];
+    }
+}
+var alphal = grueneisen/3*cvrt/bulkmodul*dichte;
+
+var elemstr = "PhysCalc2";
+txtout("",elemstr);
+var txtstr = " From the debye temperature we can calcuate the specific heat capacity " 
+            + " of the compund. At room temerature the specific heat capacity is "
+            + form(cvrt,1) + " J/kg/K. The graph above shows temperature dependency of "
+            + " the heat capycity. "; 
+txtout(txtstr,elemstr);
+var txtstr = " We have estimated the Grüneisen-parameter g=" + form(grueneisen,3) + " "
+            + " and can determine with the bulk modul and the heat capacity the "
+            + " thermal expansoion coefficient with a= " + form(alphal,2) + " um/m/K."; 
+txtout(txtstr,elemstr);
+
+
+
+ //   ffermi=1./(exp((efspace)/(kboltz*tspace(it)))+1)
+ //   chgmov(it) =  sum(dosfit.*abs(ffermi-eweight))*defbox + 1e-30 %+ dosatef*defbox % %rhoint*sum(dosfit.*(1-ffermi).*ffermi)*defbox/nvalence 
+ //   tauex = 5
+ //   phono(it) = ((tspace(it)/debye)^tauex*sum(xdt.^tauex./((exp(xdt)-1).*(1-exp(-xdt))))*dtx)
+
 
 
 //eatom = eatom/ehart
@@ -721,6 +902,18 @@ var barChartData = {
 var myLine = new Chart(document.getElementById("densityofstates").getContext("2d")).Bar(barChartData);
 
 
+
+var lineChartData = {
+    labels: eval(tspace),
+    datasets: [
+        {
+            fillColor: "rgba(255, 255, 255, 0)",
+            strokeColor: "rgba(000,255000,1)",
+            data: eval(cvt)
+        }
+    ]
+}
+var myLine = new Chart(document.getElementById("debyetemp").getContext("2d")).Line(lineChartData);
 
 
 

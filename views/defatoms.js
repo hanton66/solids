@@ -110,7 +110,7 @@ function addAtom(getAtom) {
                             "nexp": 1.9 }; 
                         }
   
-    if (getAtom == "Ca") {
+    if (getAtom == "Mg") {
         espdofz[noAtom] = { "atName": getAtom,
                             "atCharge": 12,
                             "e_spd": [-0.175, -0.000,  0.000],

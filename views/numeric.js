@@ -1387,9 +1387,10 @@ numeric.toUpperHessenberg = function toUpperHessenberg(me) {
 }
 
 numeric.epsilon = 2.220446049250313e-16;
+numeric.epsilon = 1.0e-14;
 
 numeric.QRFrancis = function(H,maxiter) {
-    if(typeof maxiter === "undefined") { maxiter = 10000; }
+    if(typeof maxiter === "undefined") { maxiter = 100000; }
     H = numeric.clone(H);
     var H0 = numeric.clone(H);
     var s = numeric.dim(H),m=s[0],x,v,a,b,c,d,det,tr, Hloc, Q = numeric.identity(m), Qi, Hi, B, C, Ci,i,j,k,iter;
