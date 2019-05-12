@@ -148,7 +148,41 @@ function maxV(x) {
     }
     y = xerg;
     return y;
-}//
+}
+//
+// get max abs(Value) of one-dimensional array
+function maxaV(x) {
+    var xerg = x[0]; y = xerg;
+    var lt=x.length;
+    for (igo = 1; igo < lt; igo++) {
+        if (x[igo] > xerg) {
+            xerg = Math.abs(x[igo]); 
+        }
+    }
+    y = xerg;
+    return y;
+}
+//
+// scale a one-dimensional array to -1/1 scale
+function scaleV(x) {
+    var xmax = maxaV(x); y=[];
+    var lt=x.length;
+    for (igo = 0; igo < lt; igo++) {
+        y[igo] = x[igo]/xmax;
+    }
+    return y;
+}
+//
+// reverse a one-dimensional array from 0..n => n..0 
+function reverseV(x) {
+    var y=[];
+    var lt=x.length;
+    for (igo = 0; igo < lt; igo++) {
+        y[igo] = x[lt-igo-1];
+    }
+    return y;
+}
+//
 // get min Valueof one-dimensional array    
 function minV(x) {
     var xerg = x[0]; y = xerg;
@@ -247,10 +281,29 @@ function form(x, z) {
 }
 
 //
-//
+// Formatting text output
 function txtout(txtstr,elemstr) {
 var nxtline = document.createElement('br');
 var element = document.getElementById(elemstr).appendChild(nxtline); 
 var wrtline = document.createTextNode(txtstr);
 var element = document.getElementById(elemstr).appendChild(wrtline);
 }
+
+//
+//
+//  For plotting set energy labels and build an energy mesh
+function getlabels(xmin,xmax,mesh,xtic) {
+var xlabel = []; espace=[]; 
+var igo = 0;
+for (igo = 0; igo < mesh; igo++) {
+    xlabel[igo] = ""; 
+}
+var nlabel = Math.floor((xmax-xmin)/xtic);
+var ntebox = Math.floor(mesh/nlabel);
+for (igo = 1; igo <= nlabel; igo++) {
+    xlabel[igo*ntebox] = Math.floor(xmin+xtic*igo);
+}
+xlabel[0] = form(xmin,1);
+return xlabel;
+}
+

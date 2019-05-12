@@ -536,7 +536,7 @@ for (ik=0; ik < nkband; ik++) {
     for (igo = 0; igo < lmsum; igo++) {
             eeig[igo] = eeig[igo] - corr;
             if (igo > lmsum/2-1) {
-                eeig[igo] = eeig[igo] + corr;
+                eeig[igo] = eeig[igo] + 3*corr;
             }
     }
     console.log ("Matrixelement Erg",eeig,corr,Solv);
@@ -659,19 +659,12 @@ var dosfit = hist(efsort,mesh);
 normdos = sumV(dosfit)/(lmsum*2)*defbox;
 dosfit = numeric.div(dosfit,normdos);
 console.log ("Norm:",normdos,sumV(dosfit),sumV(dosfit)*defbox);
+
 //
-//  For plotting set energy labels and build an energy mesh
-var dlabel = []; efspace=[]; dlabel[0] = form(eminy,1);
-for (igo = 0; igo < mesh; igo++) {
-    dlabel[igo] = ""; 
-    efspace[igo] = igo*defbox + eminy;
-}
-var nlabel = Math.floor((emaxy-eminy)/5);
-var ntebox = Math.floor(mesh/nlabel);
-for (igo = 1; igo <= nlabel; igo++) {
-    dlabel[igo*ntebox] = Math.floor(eminy+5*igo);
-}
-dlabel[0] = form(eminy,1);
+// Calculate an energy mesh and labels for plotiing
+dlabel = getlabels(eminy,emaxy,mesh,5);
+efspace = numeric.linspace(eminy,emaxy,mesh);
+
 //dlabel[mesh-1] = form(emaxy,1);
 console.log ("DOS",dosfit,dlabel,efspace);
 
@@ -735,6 +728,140 @@ etotatom = etotatom/ehart;  // Changing from ryd to eV
 ebond = evalence - etotatom;
 console.log ("Valence bond enr",ebond )
 
+//
+// Now we calculate the Optical Properties from the DOS
+// base of the optical properties is the (Pseudo-)Joint-DOS 
+var pjdos=[]; hnuf=[];lambda=[];omega=[]; eps2=[]; eps1 = [];
+var mesh = dosfit.length;
+pjdos = numeric.rep([mesh],0);
+for (jmesh = 0; jmesh < nfermi; jmesh++) {
+    for (gmesh = nfermi +1; gmesh < mesh; gmesh++ ) {
+        pjdos[gmesh-jmesh] = pjdos[gmesh-jmesh] + dosfit[jmesh]*dosfit[gmesh]*defbox*defbox;
+    }
+}
+console.log ("PJOS",pjdos);
+//
+// using a constant oscillator strength we calculated the transition probability eps2
+// and via Kronig-Kramer relationship the dielectric/suceptibility functions
+var alatA = alat*anull;
+var volnull = volume*power(alatA,3);
+var fosz = 22000/((lmsum - nvalence/2)*(nvalence/2));
+var hnuf = numeric.linspace(defbox,emaxy-eminy+defbox,mesh);
+var olabel = getlabels(0,emaxy-eminy+defbox,mesh,5);
+for (igo = 0; igo < mesh; igo++) {
+    omega[igo] = form(hnuf[igo],2);
+}
+hmin = Math.round(0.8/defbox);
+hmax = Math.round(12.4/defbox);
+if (hmax > mesh) {hmax = mesh}
+for (igo = 0; igo < mesh; igo++) {
+    eps2[igo] = pi/volnull*fosz*pjdos[igo]/power(hnuf[igo],2)
+}
+var dshift = defbox/2;
+for (igo = 0; igo < mesh; igo++) {
+    omegas = omega[igo]+dshift;
+    var sumopes = 0;
+    for (jgo = 0; jgo < mesh; jgo++) {
+        sumopes = sumopes + omega[jgo]*eps2[jgo]/(power(omega[jgo],2)-power(omegas,2))
+    }
+    eps1[igo] = 1 + 2/pi*sumopes;
+}
+//
+// which give us the frquency dependend optical indices, reflection and transmission
+nindex = sqrt(0.5*(sqrt(power(eps1[0],2)+power(eps2[0],2))+eps1[0]));
+kindex = sqrt(0.5*(sqrt(power(eps1[0],2)+power(eps2[0],2))-eps1[0]));
+reflection = power((nindex-1)/(nindex+1),2);
+transmission = 1 - reflection;
+//
+// Norm eps1/2 for plotting
+var normeps1 = []; normeps2=[];
+for (igo = hmin; igo < hmax; igo++) {
+    normeps2[igo-hmin] = eps2[igo]; 
+    normeps1[igo-hmin] = eps1[igo]; 
+    lambda[igo-hmin] = form(evnm/hnuf[igo],0);  
+}
+normeps1 = reverseV(scaleV(normeps1));
+normeps2 = reverseV(scaleV(normeps2));
+lambda = reverseV(lambda);
+//
+// Calculate the optical gap using the Joint-DOS - could be very different in case of f-electrons
+var optigap = defbox;
+for (igo=1; igo < mesh-1; igo++) {
+    if (pjdos[mesh-igo] > 0.0001) {
+        optigap = hnuf[mesh-igo];
+    }
+}
+var absorpedge = evnm/optigap;
+if (isequal(optigap,defbox)) {
+    optigap = 0;
+}
+
+
+var elemstr = "OptCalc";
+txtout("",elemstr);
+var txtstr =  " Now we try to approximate the optical properties of the compundd. "
+            + " optical transitions are coming from the exiting electrons in the "
+            + " valence band to the conduction bands by light absorption. " 
+            + " Therefore we can approximate the probalility to excite an electron"
+            + " by folding the valence band DOS to the conduction band DOS."
+            + " we have a high transition probability, "
+            + " if a photon as exactly the energy difference between a DOS peak in the "
+            + " valence band and a DOS peak in the conduction band. ";
+txtout(txtstr,elemstr);
+var txtstr =  " The folded DOS is called the Joint-Density-of-States. "
+            + " In our approximation we do not take into account forbidden transitions "
+            + " and calculate the JDSO directly from the DOS. Normally one has to make "
+            + " this calculation for each k-Value seperately.";
+txtout(txtstr,elemstr);
+
+
+var elemstr = "OptCalc2";
+txtout("",elemstr);
+var txtstr =  " From the JDSO we can calculate the dielectric and suszeptibility functions. "
+            + " These are shown in the graph below where eps_1 is magenta and eps2 is "
+            + " in cyan. The eps2-function represents the absorption spectra of the compound. "
+            + " The values are plotted against the wavelength of a photo in nm."
+txtout(txtstr,elemstr);
+var txtstr =  " From the eps1 and eps at infinity we can calculate the refraction index"
+            + " which is n=" + form(nindex,2) + " ,the refelction R= " + form(reflection*100,1)
+            + " % and the transmission T= " + form(transmission,1)*100 + " %. ";
+txtout(txtstr,elemstr);
+var txtstr =  " Furthermore we can calculate the absortion edge " + form(absorpedge,1) +" nm"
+            + " in eps2 and the optical  band gap Egap= " + form(optigap,2) + " eV.";
+txtout(txtstr,elemstr);
+
+
+console.log ("PJOS",pjdos,omega);
+console.log ("eps2",eps2,lambda,pi,volnull,fosz,hnuf);
+console.log ("Ep1",eps1)
+console.log ("n,k,R,T",nindex,kindex,reflection,transmission);
+console.log ("Plot e1,e2",lambda,normeps1,normeps2);
+console.log ("Opic",optigap,absorpedge);
+/*
+
+% which give us the frquency dependend optical indices, reflection and transmission
+nindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)+eps1(1)))
+kindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)-eps1(1)))
+reflection = ((nindex-1)/(nindex+1))^2
+transmission = 1 - reflection
+normeps2 = eps2(hmin:hmax)/max(eps2(hmin:hmax))
+normeps1 = eps1(hmin:hmax)/max(abs(eps1(hmin:hmax)))
+lambda = evnm/hnuf(hmin:hmax)   
+dosfit(1) = 0; dosfit(nmeshd) = 0 
+%
+% Calculate the optical gap using the Joint-DOS - could be very different in case of f-electrons
+optigap = defbox
+for (iw=2:nmeshd-1)
+    if (pjdos(nmeshd-iw)>0.0001)
+        optigap = hnuf(nmeshd-iw)
+    end
+end
+absorpedge = evnm/optigap
+if (isequal(optigap,defbox))
+    optigap = 0
+end
+
+*/
 
 
 
@@ -752,14 +879,12 @@ console.log ("Valence bond enr",ebond )
 
 //
 // Calculate some physical Properties
-var alatA = alat*anull
 var molmasse = 0;
 for (iatom = 1; iatom <= numAtom; iatom++) {
     isort = atomPos[iatom].Sort
     var atomchg = espdofz[isort].atCharge;
     molmasse = molmasse + 0.0063*atomchg*atomchg + 2.0886*atomchg -  1.3453;
 } 
-var volnull = volume*power(alatA,3);
 var dichte = molmasse/volnull*kgprol;
 
 
@@ -819,10 +944,9 @@ console.log (debye, vlwav,vtwav,schall,Enull, grueneisen, hardness,vdiss);
 
 //
 // now we calculate some thermal properties
-var Tmax = 600; Tmin = 10; tspace=[]; cvt=[]; xdt = []; mesh = 20;
-for (igo = 0; igo < mesh; igo++) {
-    tspace[igo] = form(Tmin + (Tmax-Tmin)/(mesh-1)*igo,0);
-}
+var Tmax = 600; Tmin = 10; cvt=[]; xdt = []; mesh = 20;
+var tspace = numeric.linspace(Tmin,Tmax,mesh);
+var tlabel = numeric.round(tspace);
 var meanmol = molmasse/numAtom;
 for (igo = 0; igo < mesh; igo++) {
     var sumxdt = 0;
@@ -851,8 +975,6 @@ var txtstr = " We have estimated the Grüneisen-parameter g=" + form(grueneisen,
 txtout(txtstr,elemstr);
 
 
-
-
 // Fill the table
 txtout(form(alat,3)+" A","c_alat");
 txtout(form(volnull,1)+" A^3","c_volnull");
@@ -875,7 +997,15 @@ txtout(form(alphal,2)+" um/m/K","c_alphal");
 txtout(form(tschmelz,1)+" K","c_tschmelz");
 txtout(form(cvrt,1)+" J/(kg*K)","c_cvrt");
 txtout(form(vaperg,1)+" kJ/mol","c_vaperg");
-
+txtout(form(bandwidth,2)+" eV","c_bandwidth");
+txtout(form(efermi,2)+" eV","c_efermi");
+txtout(form(dosatef,3)+" e-/eV","c_dosatef");
+txtout(form(bandgap,2)+" eV","c_bandgap");
+txtout(form(nindex,2)+" ","c_nindex");
+txtout(form(optigap,2)+" eV","c_optigap");
+txtout(form(reflection*100,1)+" %","c_reflection");
+txtout(form(transmission*100,1)+" %","c_transmission");
+txtout(form(absorpedge,1)+" nm","c_absorpedge");
 
 
 
@@ -899,7 +1029,7 @@ var lineChartData = {
     datasets: [
         {
             fillColor: "rgba(255, 255, 255, 0)",
-            strokeColor: "rgba(000,255000,1)",
+            strokeColor: "rgba(000,255,000,1)",
             data: eval(eevk[0])
         }
     ]
@@ -932,7 +1062,7 @@ var myLine = new Chart(document.getElementById("densityofstates").getContext("2d
 
 
 var lineChartData = {
-    labels: eval(tspace),
+    labels: eval(tlabel),
     datasets: [
         {
             fillColor: "rgba(255, 255, 255, 0)",
@@ -942,6 +1072,35 @@ var lineChartData = {
     ]
 }
 var myLine = new Chart(document.getElementById("debyetemp").getContext("2d")).Line(lineChartData);
+
+var lineChartData = {
+    labels: eval(olabel),
+    datasets: [
+        {
+            fillColor: "rgba(255, 255, 255, 0)",
+            strokeColor: "rgba(000,000,255,1)",
+            data: eval(pjdos)
+        }
+    ]
+}
+var myLine = new Chart(document.getElementById("pjdosplot").getContext("2d")).Line(lineChartData);
+
+var lineChartData = {
+    labels: eval(lambda),
+    datasets: [
+        {
+            fillColor: "rgba(255, 255, 255, 0)",
+            strokeColor: "rgba(255,000,255,1)",
+            data: eval(normeps1)
+        },
+        {
+            fillColor: "rgba(255, 255, 255, 0)",
+            strokeColor: "rgba(000,255,255,1)",
+            data: eval(normeps2)
+        }
+    ]
+}
+var myLine = new Chart(document.getElementById("eps1eps2").getContext("2d")).Line(lineChartData);
 
 
 
