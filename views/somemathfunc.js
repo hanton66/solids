@@ -291,19 +291,50 @@ var element = document.getElementById(elemstr).appendChild(wrtline);
 
 //
 //
-//  For plotting set energy labels and build an energy mesh
-function getlabels(xmin,xmax,mesh,xtic) {
-var xlabel = []; espace=[]; 
+//  For plotting set energy labels (linear just from min and max values)
+function getlabels(xmin,xmax,mesh,xstep) {
+var xlabel = []; 
 var igo = 0;
 for (igo = 0; igo < mesh; igo++) {
     xlabel[igo] = ""; 
 }
-var nlabel = Math.floor((xmax-xmin)/xtic);
+var nlabel = Math.floor((xmax-xmin)/xstep);
 var ntebox = Math.floor(mesh/nlabel);
 for (igo = 1; igo <= nlabel; igo++) {
-    xlabel[igo*ntebox] = Math.floor(xmin+xtic*igo);
+    xlabel[igo*ntebox] = Math.floor(xmin+xstep*igo);
 }
 xlabel[0] = form(xmin,1);
 return xlabel;
+}
+//
+//
+//  For plotting set energy labels (along a non-linear mesh)
+function getlabeld(x,xstep) {
+    var xlabel = []; xlabel[0] = x[0]; xnext = x[0]+ xstep;
+    var igo = 0; mesh = x.length;
+    for (igo = 1; igo < mesh; igo++) {
+        xlabel[igo] = ""; 
+        if ( x[igo] > xnext ) {
+            xlabel[igo] = form(x[igo],0);
+            xnext = x[igo] + xstep;
+        }
+    }
+    xlabel[mesh-1] = form(x[mesh-1],1);
+    return xlabel;
+}
+//
+//  For plotting set labels (alway 10)
+function getlabel(x,xtics) {
+    var xlabel = []; xlabel[0] = form(x[0],1); pointer = 0;
+    var igo = 0; mesh = x.length; xstep = (mesh-2)/(xtics-1);
+    for (igo = 1; igo < mesh; igo++) {
+        xlabel[igo] = ""; 
+    }
+    for (igo=1; igo <= xtics-2; igo++) {
+        pointer = Math.round(igo*xstep)
+        xlabel[pointer] = form(x[pointer],1);
+    }
+    xlabel[mesh-1] = form(x[mesh-1],1);
+    return xlabel;
 }
 

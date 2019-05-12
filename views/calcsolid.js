@@ -662,9 +662,9 @@ console.log ("Norm:",normdos,sumV(dosfit),sumV(dosfit)*defbox);
 
 //
 // Calculate an energy mesh and labels for plotiing
-dlabel = getlabels(eminy,emaxy,mesh,5);
+//dlabel = getlabels(eminy,emaxy,mesh,5);
 efspace = numeric.linspace(eminy,emaxy,mesh);
-
+dlabel = getlabel(efspace,10);
 //dlabel[mesh-1] = form(emaxy,1);
 console.log ("DOS",dosfit,dlabel,efspace);
 
@@ -747,7 +747,7 @@ var alatA = alat*anull;
 var volnull = volume*power(alatA,3);
 var fosz = 22000/((lmsum - nvalence/2)*(nvalence/2));
 var hnuf = numeric.linspace(defbox,emaxy-eminy+defbox,mesh);
-var olabel = getlabels(0,emaxy-eminy+defbox,mesh,5);
+var olabel = getlabel(hnuf,10);
 for (igo = 0; igo < mesh; igo++) {
     omega[igo] = form(hnuf[igo],2);
 }
@@ -782,7 +782,7 @@ for (igo = hmin; igo < hmax; igo++) {
 }
 normeps1 = reverseV(scaleV(normeps1));
 normeps2 = reverseV(scaleV(normeps2));
-lambda = reverseV(lambda);
+lambda = getlabel(reverseV(lambda),10);
 //
 // Calculate the optical gap using the Joint-DOS - could be very different in case of f-electrons
 var optigap = defbox;
@@ -946,7 +946,8 @@ console.log (debye, vlwav,vtwav,schall,Enull, grueneisen, hardness,vdiss);
 // now we calculate some thermal properties
 var Tmax = 600; Tmin = 10; cvt=[]; xdt = []; mesh = 20;
 var tspace = numeric.linspace(Tmin,Tmax,mesh);
-var tlabel = numeric.round(tspace);
+// var tlabel = numeric.round(tspace);
+var tlabel = getlabel(tspace,10);
 var meanmol = molmasse/numAtom;
 for (igo = 0; igo < mesh; igo++) {
     var sumxdt = 0;

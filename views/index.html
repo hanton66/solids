@@ -21,9 +21,6 @@
     <style>
             img {
               background: white;
-              border: 1px solid black;
-              width: 10%; 
-              height: auto;	
             }
             canvas {
               background: white;
@@ -179,26 +176,37 @@
             <div id="ElecCalc"></div>
 
             <h3>Band Structure</h3>
-            <div id="BandCalc"></div>            
+            <div id="BandCalc"></div>    
+            <figure>
             <canvas id="bandstructure" width="300" height="400"> </canvas> 
+            <figcaption>Fig 1. The Bandstructure along different k-Points (x-axis) and band energy in eV (y-axis).</figcaption></figure>            
             <div id="BandCalc2"></div>              
 
             <h3>Density-of-States</h3>
             <div id="DosCalc"></div>
-            <canvas id="densityofstates" width="300" height="200"> </canvas>   
+            <figure>
+            <canvas id="densityofstates" width="300" height="200"> </canvas>  
+            <figcaption>Fig 2. The Density-of-States (y-axis) along the energy in eV (x-axis).</figcaption></figure>      
             <div id="DosCalc2"></div>            
             <HR>  
 
             <h2>Physical Properties</h2>
             <div id="PhysCalc"></div>
-            <canvas id="debyetemp" width="300" height="300"> </canvas>   
-            <div id="PhysCalc2"></div>            
+            <figure>
+            <canvas id="debyetemp" width="300" height="300"> </canvas> 
+            <figcaption>Fig 3. The specific heat capacity in J/kg/k (y-axis) along the temperature in K (x-axis).</figcaption></figure>                     
+            <div id="PhysCalc2"></div>
+            <div id="formula"><img src="form_debye.svg"></div>            
 
             <h2>Optical Properties</h2>
             <div id="OptCalc"></div>
+            <figure>
             <canvas id="pjdosplot" width="300" height="200"> </canvas>   
+            <figcaption>Fig 4. The Pseudos-JDOS probability (y-axis) along the photon energy in eV (x-axis).</figcaption></figure>                     
             <div id="OptCalc2"></div>  
+            <figure>
             <canvas id="eps1eps2" width="300" height="200"> </canvas>   
+            <figcaption>Fig 5. The scaled eps1 and eps2 function (y-axis) along the photon wavelength in nm (x-axis).</figcaption></figure>                     
             <div id="OptCalc3"></div>              
 
 
