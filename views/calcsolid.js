@@ -775,11 +775,12 @@ var vlwav = sqrt((3*bulkmodul+4*shearmodul)/(3*dichte))*mpros;
 var vtwav = sqrt(shearmodul/dichte)*mpros;
 var schall = power(1/3*(2/power(vtwav,3)+1/power(vlwav,3)),(-1/3));
 var Enull = -betab*volnull/power(nexp+1,2)/numAtom;
-var ediss = -Enull 
+var vaperg = -Enull*evinkjmol 
 var rhoint=power(bulkmodul/1900,3/5);
 var grueneisen= -1/6-nexp 
-var mohs = 10*sinh(2*bulkmodul/500)+0.2
+var hardness= 10*tanh(2*bulkmodul/500)+0.2
 var vdiss =exp(-1/nexp+log(volnull))
+var tschmelz = 3e-5*power(debye,2)*power(volnull/numAtom,2/3)*molmasse/numAtom
 // var tschmelz = 3e-5*power(debye,2)*power((volnull/numAtom),(2/3))*molmasse/Nnu
 
 var elemstr = "PhysCalc";
@@ -814,7 +815,7 @@ txtout(txtstr,elemstr);
 
 console.log (rwigner, nexp);
 console.log (bulkmodul, shearmodul, c11modul, youngmodul);
-console.log (debye, vlwav,vtwav,schall,Enull, grueneisen, mohs,vdiss);
+console.log (debye, vlwav,vtwav,schall,Enull, grueneisen, hardness,vdiss);
 
 //
 // now we calculate some thermal properties
@@ -848,6 +849,33 @@ var txtstr = " We have estimated the Grüneisen-parameter g=" + form(grueneisen,
             + " and can determine with the bulk modul and the heat capacity the "
             + " thermal expansoion coefficient with a= " + form(alphal,2) + " um/m/K."; 
 txtout(txtstr,elemstr);
+
+
+
+
+// Fill the table
+txtout(form(alat,3)+" A","c_alat");
+txtout(form(volnull,1)+" A^3","c_volnull");
+txtout(strucType,"c_strucType");
+txtout(crystForm,"c_crystForm");
+txtout(numAtom,"c_numAtom");
+txtout(form(dichte,3)+ " kg/l","c_dichte");
+txtout(form(molmasse,1)+" g/mol","c_molmasse");
+txtout(form(bulkmodul,1)+" GPa","c_bulkmodul");
+txtout(form(shearmodul,1)+" GPa","c_shearmodul");
+txtout(form(youngmodul,1)+" GPa","c_youngmodul");
+txtout(form(c11modul,1)+" GPa","c_c11modul");
+txtout(form(hardness,0)+" ","c_hardness");
+txtout(form(schall,1)+" m/s","c_schall");
+txtout(form(vtwav,1)+" m/S","c_vtwav");
+txtout(form(vlwav,1)+" m/S","c_vlwav");
+txtout(form(grueneisen,2)+" ","c_grueneisen");
+txtout(form(debye,1)+" K","c_debye");
+txtout(form(alphal,2)+" um/m/K","c_alphal");
+txtout(form(tschmelz,1)+" K","c_tschmelz");
+txtout(form(cvrt,1)+" J/(kg*K)","c_cvrt");
+txtout(form(vaperg,1)+" kJ/mol","c_vaperg");
+
 
 
 

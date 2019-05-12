@@ -46,6 +46,13 @@ function sinh(x) {
     y = 0.5 * (exp(x) - exp(-x));
     return y;
 }
+//
+// Tangens-Hyberbolicus-Function
+function tanh(x) {
+    var y;
+    y = (exp(2*x) - 1)/(exp(2*x) + 1);
+    return y;
+}
 
 //
 // Nummeric Differential
