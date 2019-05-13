@@ -149,9 +149,9 @@ function buildCrystal() {
      var eatom = 0.0; etotatom = 0.0; nvalat = 0; 
 
     var elemstr = "ReportCalc"
-    var txtstr = "We calculate a crystal of structure type " + strucType 
+    var txtstr = " We calculate a crystal of structure type " + strucType 
                 + " with " + numAtom + " atom(s) in the unit cell. " 
-                + " The atoms are of " + maxCompund + " different compund(s). "
+                + " The atoms are from " + maxCompund + " different compund(s). "
                 + " The crystal form is " + crystForm;
     txtout(txtstr, elemstr);
 
@@ -204,10 +204,10 @@ function buildCrystal() {
         lmsum = lmsum +  power(e_at[iatom].lmax,2);  
 
         var elemstr = "ReportCalc";
-        var txtstr = "The crystal has a " + atomSort 
-                        + " Atom with valence energy " 
+        var txtstr = " The crystal has a " + atomSort 
+                        + " Atom with a valence energy of  " 
                         + form(eatom,3) + " ryd "
-                        +" using lmax a maximum angular momentum of" + e_at[iatom].lmax + "."
+                        +" using a maximum angular momentum of " + e_at[iatom].lmax + " ."
                         +" The fractional atom position in the unit cell is at { " 
                         + atomPos[iatom].Pos + " } .";
         txtout(txtstr,elemstr);
@@ -217,7 +217,7 @@ function buildCrystal() {
     var elemstr = "ReportCalc";
     var txtstr = "The total atomic valence energy is " + etotatom 
                     + " ryd. We expecting " + lmsum 
-                    + " eigenstates per k. ";
+                    + " eigenstates per k-vector. ";
     txtout(txtstr,elemstr);
 
 
@@ -272,12 +272,12 @@ if (crystForm == "fcc") {
  }
 
  var elemstr = "BandCalc";
- var txtstr = "The bandstructure is determined for the symmetry points " 
+ var txtstr = " The bandstructure is determined for the following symmetry points " 
                  + "[" + APoint + "], "
                  + "[" + BPoint + "], "
                  + "[" + CPoint + "]"                                 
-                 + " and of course the Gamma-Point G. "
-                 + "The k-points are labeld as " + b1titel + ".";
+                 + " and the Gamma-Point G. "
+                 +  "The k-points are labeld as " + b1titel + " .";
  txtout(txtstr,elemstr);
 
 
@@ -288,7 +288,7 @@ var volume = numeric.det(T);
 
 var elemstr = "ReportCalc";
 txtout("",elemstr);
-var txtstr = "The real lattice vectors T are defined as " 
+var txtstr = " The real space lattice vectors R are defined as " 
                 + "{ [" + t1 + "] / [" + t2 + "] / [" + t3 + "] }.";
 txtout(txtstr,elemstr);
 
@@ -298,7 +298,7 @@ txtout(txtstr,elemstr);
 var B = numeric.inv(T)
 
 var elemstr = "ReportCalc";
-var txtstr = "Which leads to following reciprocal space vectors B = " 
+var txtstr = " Which leads to the following reciprocal space vectors B = " 
                 + "{ [" + B + "]}.";
 txtout(txtstr,elemstr);
 
@@ -414,12 +414,12 @@ console.log("Lattice Constant:",alat*anull);
 
 var elemstr = "ReportCalc";
 txtout("",elemstr);
-var txtstr = "From the investigation of the super cell of 26 neighbour unit cells, " 
-            + "we determine that the smallest distance is " + form(totmin,3) + " fractional units. "
-            + "This leads to an effective coordination number of  " + form(near[1],1) 
-            + " for the first atom etc. Under the assumptions, that the neighbour atoms "
-            + "are touchuing each other according to their atomic radius we can determine "
-            + "the lattice constant a = " + form(alat*anull*100,1) + " pm."; 
+var txtstr = " From the investigation of the super cell of 26 neighbour unit cells, " 
+            + " we determine that the smallest distance is " + form(totmin,3) + " fractional units. "
+            + " This leads to an effective coordination number of  " + form(near[1],0) 
+            + " for the first atom etc. Under the assumption, that the neighbour atoms "
+            + " are touching each other according to their atomic radius we can estimate "
+            + " the lattice constant to a = " + form(alat*anull*100,1) + " pm."; 
 txtout(txtstr,elemstr);
 
 //
@@ -601,20 +601,21 @@ for (ik=0; ik < nkband; ik++) {
 
     var elemstr = "BandCalc";
     txtout("",elemstr);
-    var txtstr =  "The following line chart shows the bandstructure of the compound."
-                + " Occupied valence bands are in green. Unoccupied conduction bands are in red. "
-                + " The energy scale in the plot is set to Fermi-Energy = 0 eV"; 
+    var txtstr =  " The following line chart shows the bandstructure of the compound. "
+                + " Occupied valence bands are in green. Unoccupied or not fully occupied " 
+                + "conduction bands are plotted in red. "
+                + " The energy scale in the plot is set relative to the Fermi-Energy (= 0 eV)"; 
     txtout(txtstr,elemstr);
     txtout("",elemstr);
 
     var elemstr = "BandCalc2";
     txtout("",elemstr);
-    var txtstr =  "We evaluate the electronic structure of the Gamma-Point in the "
+    var txtstr =  " We evaluate the electronic structure of the Gamma-Point in the "
                 + " middle of the Brillouin-Zone. The direct band gap is " + form(gapdirect,2)     
                 + " eV. There are " + form(nfermi+1,0) + " valence bands occupied with " 
-                + nvalence + " electrons. The Fermi energy would be about " + form(efermi,2) + " eV. ";
+                + nvalence + " electrons. The Fermi energy is about " + form(efermi,2) + " eV. ";
     txtout(txtstr,elemstr);
-    var txtstr =  " The deepest electronic band lies about " + form(eev[1][0]-efermi,2) + " eV."; 
+    var txtstr =  " The deepest electronic band lies at " + form(eev[1][0]-efermi,2) + " eV."; 
     txtout(txtstr,elemstr);
 
 
@@ -652,13 +653,13 @@ for (irun =1; irun <= nmix; irun++) {
 
 var elemstr = "DosCalc";
 txtout("",elemstr);
-var txtstr =  " We have approximate the density-of-state (DOS) for the compound by linear interpolation "
-            + " of the energye values from the k-Point evaluation. We assume, that the four "
-            + " k-points in our plot roughly describe the four corners of a the Brillouin segemnt. "
-            + " Withn this segemnt we run from Gamma to the face of the three remaining k-Points. "
+var txtstr =  " We approximate the density-of-state (DOS) for the compound by a linear interpolation "
+            + " between the energy values of the calculated k-Point. We assume, that the four "
+            + " k-points in our plot roughly describe the four corners of a representative Brillouin segment. "
+            + " Withn this segment we run from G to the three remaining k-Points on the surface of the BZ-zone. "
             + " This is like going from the center of a sphere to the surface and meanns that the "
-            + " weight of the calulated outer inertpolated energy values are higher with k-square, "
-            + " whereas k means the absolute value of k-vector. The following bar chart shows the "
+            + " weight of the calculated outer interpolated energy values are scaling with k-square, "
+            + " whereas k means the absolute value of the k-vector. The following bar chart shows the "
             + " calculated DOS of the investigated compund.";
 txtout(txtstr,elemstr);
 
@@ -742,12 +743,12 @@ if (isequal(dosatef,0)) {
 var elemstr = "DosCalc2";
 txtout("",elemstr);
 var txtstr =  " The DOS shows the calculated energy values in a range from " + form(eminx,2) 
-            + " eV in the valence band to " + form(emaxx,2) + " eV in the conduction band";
+            + " eV in the valence band to " + form(emaxx,2) + " eV in the conduction band.";
 txtout(txtstr,elemstr);
-var txtstr =  " We can now determine the Fermi-Energy more accurate because no all k-Points are "
-            + " involved. The Fermi-Energy determined from the DOS lies about " + form(efermi,2) + " eV. "
+var txtstr =  " We can now determine the Fermi-Energy more accurate because now all k-Points are "
+            + " involved. The Fermi-Energy determined from the DOS is about " + form(efermi,2) + " eV. "
             + " The total bandwidth of the valence band can be determined to " + form(bandwidth,2) + " eV. "
-            + " The band gap analysis od the DOS results in a gap of " + form(bandgap,2) + " eV."
+            + " The band gap analysis of the DOS results in a gap of " + form(bandgap,2) + " eV."
             + " The charge density at the Fermi-Energy is " + form(dosatef,2) + " e-/eV. "
             + " The compund seems to be " + gaptype + substtype + ".";
 txtout(txtstr,elemstr);
@@ -838,81 +839,44 @@ if (isequal(optigap,defbox)) {
 
 var elemstr = "OptCalc";
 txtout("",elemstr);
-var txtstr =  " Now we try to approximate the optical properties of the compundd. "
-            + " optical transitions are coming from the exiting electrons in the "
-            + " valence band to the conduction bands by light absorption. " 
-            + " Therefore we can approximate the probalility to excite an electron"
+var txtstr =  " Now we try to approximate the optical properties of the compund. "
+            + " Optical transitions occur from exciting electrons from the "
+            + " valence bands to the conduction bands by light absorption. " 
+            + " Therefore we can approximate the probaliity to excite an electron "
             + " by folding the valence band DOS to the conduction band DOS."
-            + " we have a high transition probability, "
-            + " if a photon as exactly the energy difference between a DOS peak in the "
+            + " E.g. we have a high transition probability, "
+            + " if a photon provides exactly the energy difference between a DOS peak in the "
             + " valence band and a DOS peak in the conduction band. ";
 txtout(txtstr,elemstr);
 var txtstr =  " The folded DOS is called the Joint-Density-of-States. "
             + " In our approximation we do not take into account forbidden transitions "
-            + " and calculate the JDSO directly from the DOS. Normally one has to make "
+            + " and calculate the JDOS directly from the DOS. Normally one has to make "
             + " this calculation for each k-Value seperately.";
 txtout(txtstr,elemstr);
 
 
 var elemstr = "OptCalc2";
 txtout("",elemstr);
-var txtstr =  " From the JDSO we can calculate the dielectric and suszeptibility functions. "
-            + " These are shown in the graph below where eps_1 is magenta and eps2 is "
-            + " in cyan. The eps2-function represents the absorption spectra of the compound. "
-            + " The values are plotted against the wavelength of a photo in nm."
+var txtstr =  " From the JDOS we can calculate the dielectric and suszeptibility functions by using the Kramer-Kronings relation. "
+            + " These are shown in the graph below where eps_1 is plotted in Magenta and eps2 is "
+            + " plotted in Cyan. The eps2-function represents the absorption spectra of the compound. "
+            + " The values of eps_1 and eps_2 are plotted against the wavelength of a photon in nm."
 txtout(txtstr,elemstr);
-var txtstr =  " From the eps1 and eps at infinity we can calculate the refraction index"
-            + " which is n=" + form(nindex,2) + " ,the refelction R= " + form(reflection*100,1)
+var txtstr =  " From the eps1 and eps2 values at infinity we can calculate the refractive index"
+            + " which is n=" + form(nindex,2) + ", the refelction R= " + form(reflection*100,1)
             + " % and the transmission T= " + form(transmission,1)*100 + " %. ";
 txtout(txtstr,elemstr);
-var txtstr =  " Furthermore we can calculate the absortion edge " + form(absorpedge,1) +" nm"
-            + " in eps2 and the optical  band gap Egap= " + form(optigap,2) + " eV.";
+var txtstr =  " Furthermore we can calculate the absorption edge " + form(absorpedge,1) +" nm"
+            + " in eps2 and the optical band gap = " + form(optigap,2) + " eV.";
 txtout(txtstr,elemstr);
 
 
-console.log ("PJOS",pjdos,omega);
-console.log ("eps2",eps2,lambda,pi,volnull,fosz,hnuf);
-console.log ("Ep1",eps1)
-console.log ("n,k,R,T",nindex,kindex,reflection,transmission);
-console.log ("Plot e1,e2",lambda,normeps1,normeps2);
-console.log ("Opic",optigap,absorpedge);
-/*
-% which give us the frquency dependend optical indices, reflection and transmission
-nindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)+eps1(1)))
-kindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)-eps1(1)))
-reflection = ((nindex-1)/(nindex+1))^2
-transmission = 1 - reflection
-normeps2 = eps2(hmin:hmax)/max(eps2(hmin:hmax))
-normeps1 = eps1(hmin:hmax)/max(abs(eps1(hmin:hmax)))
-lambda = evnm/hnuf(hmin:hmax)   
-dosfit(1) = 0; dosfit(nmeshd) = 0 
-%
-% Calculate the optical gap using the Joint-DOS - could be very different in case of f-electrons
-optigap = defbox
-for (iw=2:nmeshd-1)
-    if (pjdos(nmeshd-iw)>0.0001)
-        optigap = hnuf(nmeshd-iw)
-    end
-end
-absorpedge = evnm/optigap
-if (isequal(optigap,defbox))
-    optigap = 0
-end
-*/
-
-
-
-//    var  A = [[1,0,1],[0,2,0],[0.3,0,1]]; Am = A;
-//    var u  = sqrt(numeric.norm2(A));
-//    var rn = numeric.diag(numeric.getDiag(A));
-//    console.log (A,u, rn);
-//    for (irun = 1; irun < 5; irun++) {
-//        Am = numeric.dot(rn,A);
-//        u  = sqrt(numeric.norm2(Am));
-//       rn = numeric.getDiag(numeric.div(Am,u));
-//       console.log (A, Am, u, rn);
-//       rn = numeric.diag(rn);
-//   }
+//console.log ("PJOS",pjdos,omega);
+//console.log ("eps2",eps2,lambda,pi,volnull,fosz,hnuf);
+//console.log ("Ep1",eps1)
+//console.log ("n,k,R,T",nindex,kindex,reflection,transmission);
+//console.log ("Plot e1,e2",lambda,normeps1,normeps2);
+//console.log ("Opic",optigap,absorpedge);
 
 //
 // Calculate some physical Properties
@@ -947,12 +911,12 @@ var tschmelz = 3e-5*power(debye,2)*power(volnull/numAtom,2/3)*molmasse/numAtom
 
 var elemstr = "PhysCalc";
 txtout("",elemstr);
-var txtstr = " From the total valence energy calculation of the DOS we try to estimate a number of"
+var txtstr = " From the total valence energy calculation of the DOS we try to estimate a number of some"
             + " physical properties. First of all we can assume from the atomic composition same basic "
             + " static properties."; 
 txtout(txtstr,elemstr);
 txtout("",elemstr);
-var txtstr = "The molare mass of the compound is about " 
+var txtstr = " The molare mass of the compound is about " 
                 + form(molmasse,2) + " g/mol."
                 + " The equlibrium volume of the unit cell is " + form(volnull,2) + " A^3. "
                 + " That leads to a mass density of the compund of " + form(dichte,3) + " kg/l. ";
@@ -960,16 +924,16 @@ txtout(txtstr,elemstr);
 txtout("",elemstr);
 var txtstr = " Using an equation of state, we can determine from the energy/volume relation "
             + " other meachnical, thermal and elastic properties. The bonding energy per unit cell "
-            + " is about" + form(ebond,2) + " eV, which is roughly a dsissoziation energy of"
-            + form(Enull,1) + " kj/mol.";
+            + " is about" + form(ebond,2) + " eV, which is roughly a dissoziation energy of "
+            + form(Enull*evinkjmol,1) + " kj/mol.";
 txtout(txtstr,elemstr);
 var txtstr = " The bulk modulus is " + form(bulkmodul,1) + " GPa. The other eleastic constants "
-            + " from mixed polycrystalline material can be approximated. The shearmodul is "
-            + form(shearmodul,1) + " GPa and the Young moduls is " + form(youngmodul,1) + "GPa "
-            + " the tetragonal shear modul is " + form(c11modul,1) + " GPa.";
+            + " can be approximated in the case of a polycrystalline substance. The shearmodul is "
+            + form(shearmodul,1) + " GPa and the Young moduls is " + form(youngmodul,1) + " GPa."
+            + " The tetragonal shear modul is " + form(c11modul,1) + " GPa.";
 txtout(txtstr,elemstr);
-var txtstr = " The Deby temperature of this compound is " + form(debye,1) + " K. "
-            + " The veloyity of sound is " + form(schall,1) + " m/s with a transversal part "
+var txtstr = " The Debye temperature of this compound is " + form(debye,1) + " K. "
+            + " The speed of sound is " + form(schall,1) + " m/s with a transversal velocity part "
             + " of " + form(vtwav,1) + " m/s and a logituidinal part of " + form(vlwav,1) + " m/s.";          ;
 txtout(txtstr,elemstr);
 
@@ -1002,20 +966,20 @@ var alphal = grueneisen/3*cvrt/bulkmodul*dichte;
 
 var elemstr = "PhysCalc2";
 txtout("",elemstr);
-var txtstr = " From the debye temperature we can calcuate the specific heat capacity " 
-            + " of the compund. At room temerature the specific heat capacity is "
-            + form(cvrt,1) + " J/kg/K. The graph above shows temperature dependency of "
-            + " the heat capycity. "; 
+var txtstr = " The Debye temperature allows us to calcuate the specific heat capacity. " 
+            + " At room temerature the specific heat capacity is "
+            + form(cvrt,1) + " J/kg/K. The graph above shows the temperature dependency of "
+            + " the heat capacity. "; 
 txtout(txtstr,elemstr);
-var txtstr = " We have estimated the Grüneisen-parameter g=" + form(grueneisen,3) + " "
-            + " and can determine with the bulk modul and the heat capacity the "
+var txtstr = " The Grüneisen-parameter is set to g=" + form(grueneisen,3) + ". "
+            + " We can estimate with the bulk modulus and the heat capacity the linear"
             + " thermal expansoion coefficient with a= " + form(alphal,2) + " um/m/K."; 
 txtout(txtstr,elemstr);
 
 
 // Fill the table
 txtout(compoundname,"c_compoundname");
-txtout(form(alat,3)+" Å","c_alat");
+txtout(form(alat*anull,3)+" Å","c_alat");
 txtout(form(volnull,1)+" Å^3","c_volnull");
 txtout(strucType,"c_strucType");
 txtout(crystForm,"c_crystForm");
