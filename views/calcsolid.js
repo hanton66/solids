@@ -12,6 +12,7 @@ var espdofz = [];
 var e_at = [];
 var nvalence = 0;
 var nexpanh = 0;
+var compoundname = " ";
 //
 // for plotting
 var blable = ["1","2","3","4"]
@@ -107,7 +108,16 @@ function setStructType(getType,getNum) {
         atomPos[6] =  { "Sort": 2 , "Pos":[ 0.50 , 0.50, 0.50]};                  
     }
 
-
+    if (strucType == "C9") {
+        numAtom = 6;
+        crystForm = "fcc";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]}; 
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.250 , 0.250, 0.250]}; 
+        atomPos[3] =  { "Sort": 2 , "Pos":[ 0.125 , 0.125, 0.125]}; 
+        atomPos[4] =  { "Sort": 2 , "Pos":[ 0.375 , 0.375, 0.125]};
+        atomPos[5] =  { "Sort": 2 , "Pos":[ 0.375 , 0.125, 0.375]}; 
+        atomPos[6] =  { "Sort": 2 , "Pos":[ 0.125 , 0.375, 0.375]};                  
+    }
 
     if (strucType == "Gas") {
         numAtom = 2;
@@ -146,6 +156,31 @@ function buildCrystal() {
     txtout(txtstr, elemstr);
 
     console.log(maxCompund);
+
+    var compelem=[]; companza=[];
+
+    var cwei = maxCompund/numAtom; cmin = 1000;
+    for (igo=1; igo <= maxCompund; igo++) {
+        companza[igo] = 0;
+        for (iatom=1; iatom <= numAtom; iatom++) {
+            isort = atomPos[iatom].Sort;
+            if (isequal(igo,isort)) {
+                compelem[isort] = espdofz[isort].atName;
+                companza[isort] = companza[isort] + cwei;
+            }
+        }
+        if (companza[igo] < cmin) {
+            cmin = companza[igo];
+        }
+    }
+
+    var cnum = "";
+    for (igo=1; igo <= maxCompund; igo++) {
+        cnum = form(companza[igo]/cmin,0);
+        if (cnum == 1) { cnum = ""; }
+        compoundname = compoundname + compelem[igo] + cnum;
+    }
+
      for (iatom = 1; iatom <= numAtom; iatom++ ) {
         e_at[iatom] = {"No":1, "sort:": 1, "erg": [0,0,0], "lmax": 2, "pointer": lmsum}; 
         console.log (espdofz[iatom]);
@@ -297,7 +332,11 @@ var xatomcor = [];
 var atomcor = [];  
 for (iat=1; iat <= numAtom; iat++) { 
     atomcor[iat] = numeric.dot(atomPos[iat].Pos,T);
+    if (isequal(crystForm,'fcc'))  { 
+        atomcor[iat] = atomPos[iat].Pos;
+     }
 }
+
 
 console.log ("AtomCor ",atomcor);
 igo = 0;
@@ -838,7 +877,6 @@ console.log ("n,k,R,T",nindex,kindex,reflection,transmission);
 console.log ("Plot e1,e2",lambda,normeps1,normeps2);
 console.log ("Opic",optigap,absorpedge);
 /*
-
 % which give us the frquency dependend optical indices, reflection and transmission
 nindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)+eps1(1)))
 kindex = sqrt(0.5*(sqrt(eps1(1)^2+eps2(1)^2)-eps1(1)))
@@ -860,7 +898,6 @@ absorpedge = evnm/optigap
 if (isequal(optigap,defbox))
     optigap = 0
 end
-
 */
 
 
@@ -977,8 +1014,9 @@ txtout(txtstr,elemstr);
 
 
 // Fill the table
-txtout(form(alat,3)+" A","c_alat");
-txtout(form(volnull,1)+" A^3","c_volnull");
+txtout(compoundname,"c_compoundname");
+txtout(form(alat,3)+" Å","c_alat");
+txtout(form(volnull,1)+" Å^3","c_volnull");
 txtout(strucType,"c_strucType");
 txtout(crystForm,"c_crystForm");
 txtout(numAtom,"c_numAtom");
@@ -994,14 +1032,14 @@ txtout(form(vtwav,1)+" m/S","c_vtwav");
 txtout(form(vlwav,1)+" m/S","c_vlwav");
 txtout(form(grueneisen,2)+" ","c_grueneisen");
 txtout(form(debye,1)+" K","c_debye");
-txtout(form(alphal,2)+" um/m/K","c_alphal");
+txtout(form(alphal,2)+" µm/m/K","c_alphal");
 txtout(form(tschmelz,1)+" K","c_tschmelz");
 txtout(form(cvrt,1)+" J/(kg*K)","c_cvrt");
 txtout(form(vaperg,1)+" kJ/mol","c_vaperg");
 txtout(form(bandwidth,2)+" eV","c_bandwidth");
 txtout(form(efermi,2)+" eV","c_efermi");
-txtout(form(dosatef,3)+" e-/eV","c_dosatef");
-txtout(form(bandgap,2)+" eV","c_bandgap");
+txtout(form(dosatef,3)+" e¯/eV","c_dosatef");
+txtout(form(gapdirect,2)+" eV","c_gapdirect");
 txtout(form(nindex,2)+" ","c_nindex");
 txtout(form(optigap,2)+" eV","c_optigap");
 txtout(form(reflection*100,1)+" %","c_reflection");
@@ -1103,6 +1141,13 @@ var lineChartData = {
 }
 var myLine = new Chart(document.getElementById("eps1eps2").getContext("2d")).Line(lineChartData);
 
-
+// References
+// https://www.researchgate.net/publication/280131674_Simple_Tight_Binding_Electronic_Structure_Calculation_Method_based_on_a_Mathematical_Prototyping_System
+// https://en.wikipedia.org/wiki/Debye_model
+// https://en.wikipedia.org/wiki/Tight_binding
+// https://en.wikipedia.org/wiki/Kramers%E2%80%93Kronig_relations
+// https://en.wikipedia.org/wiki/Refractive_index  siehe Relative permittivity and permeability
+// https://en.wikipedia.org/wiki/Bulk_modulus
+// https://en.wikipedia.org/wiki/Anton-Schmidt_equation_of_state
 
 }

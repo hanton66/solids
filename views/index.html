@@ -21,6 +21,7 @@
     <style>
             img {
               background: white;
+              width: 90%;
             }
             canvas {
               background: white;
@@ -157,8 +158,19 @@
             <p>
             We have investigated the electronic structure of the following solid by means
             of a tight-binding bandstructure calculation. <br>
+            We have to solve the crystal wave functions of the electrons
+            <img src="form_crystwav.png"><br>
+            Which can be expressed as the Bloch functions of the atomic orbital.
+            <img src="form_blochwav.png"><br>
+            The Bloch waves have to fullfill the secular equation.
+            <img src="form_secequm.png"><br>
+            With the following matrix elements under the tight-binding nearest neighbour approsimation.
+            <img src="form_matrixelem.png"><br> 
             The TB approximaiton makes use of the fact, that the overlap integrals from  nearest 
-            neighbour interactions between atoms can be detmerined by a set of parameters. 
+            neighbour interactions between atoms.
+            <img src="form_overlap.png"><br> 
+            These can be detmerined by a set of parameters. 
+            <img src="form_harissonpara.png"><br>
             The follwong calculation uses the parametrization of Harrison.    
             </p>
 
@@ -212,6 +224,8 @@
             <h2>Summary</h2>
             <p>The following table gives an overview of the calculated values.</p>
             <table border="1" align="left" width="90%">
+                <tr><th colspan="2">Compound</th></tr>      
+                <tr><td>Formula</td><td align="right"><div id="c_compoundname"></div></td></tr>                
                 <tr><th colspan="2">Crystal Strcuture</th></tr>      
                 <tr><td>Crystal Structure</td><td align="right"><div id="c_strucType"></div></td></tr>
                 <tr><td>Bravais Lattice</td><td align="right"><div id="c_crystForm"></div></td></tr>
@@ -252,7 +266,7 @@
                 <tr><th colspan="2">Optical Properties</th></tr>      
                 <tr><td>Refractive Index</td><td align="right"><div id="c_nindex"></div></td></tr>
                 <tr><td>Optical Bandgap</td><td align="right"><div id="c_optigap"></div></td></tr>
-                <tr><td>Refelction</td><td align="right"><div id="c_reflection"></div></td></tr>                                                                                                                                                                       
+                <tr><td>Reflection</td><td align="right"><div id="c_reflection"></div></td></tr>                                                                                                                                                                       
                 <tr><td>Transmission</td><td align="right"><div id="c_transmission"></div></td></tr>  
                 <tr><td>Absorption Edge</td><td align="right"><div id="c_absorpedge"></div></td></tr>
  
