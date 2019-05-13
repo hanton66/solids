@@ -2,6 +2,7 @@
 <html lang="de">
   <head>
     <title>Solid State Calculation</title>
+    <meta charset="utf-8">   
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
@@ -16,7 +17,6 @@
     <script src="calcsolid.js"> </script>   
     <script src="numeric.js"> </script>  
 
-  
 
     <style>
             img {
@@ -43,10 +43,9 @@
     
 
     <form id="start" class="panel" title="Solid State Calculation" selected="true">
-        <img src="solidstate.png">
         <p>Calculate the solid state electronic and physical properties of any solid.<br></p>
         <a href="#setCrystal">
-            <button  type="button"> Select StructureType </button>
+            <button  type="button"> GO !!! </button>
         </a>
 
     </form>
@@ -247,7 +246,7 @@
                 <tr><th colspan="2">Electronic Properties</th></tr>      
                 <tr><td>Valence bandwidth</td><td align="right"><div id="c_bandwidth"></div></td></tr>
                 <tr><td>Fermi Energy</td><td align="right"><div id="c_efermi"></div></td></tr>
-                <tr><td>Electronic Bandgap</td><td align="right"><div id="c_bandgap"></div></td></tr>                                                                                                                                                                       
+                <tr><td>Electronic Bandgap at G</td><td align="right"><div id="c_gapdirect"></div></td></tr>                                                                                                                                                                       
                 <tr><td>Charge density at fermi</td><td align="right"><div id="c_dosatef"></div></td></tr>  
 
                 <tr><th colspan="2">Optical Properties</th></tr>      
