@@ -46,115 +46,67 @@
     <a id="viewButton" class="button" onclick="print()">Print</a>
     
 
-    <form id="start" class="panel" title="Solid State Calculation" selected="true">
-        <p>Calculate the solid state electronic and physical properties of any solid.<br></p>
-        <a href="#setCrystal">
-            <button  type="button"> GO !!! </button>
-        </a>
+    <form id="start" class="panel" title="Solid State Calculation" selected="true" >
 
-    </form>
-
-
-    <form id="setCrystal" class="panel" title="Select Structure Type" >
-
-        <p>Monoatomic Compounds</p>
-        <table width="100%">
-            <tr>
-                <td><a onclick="setStructType('Ah',1);"><button> Ah </button></a></td>                
-                <td><a onclick="setStructType('A1',1);"><button> A1 </button></a></td>
-                <td><a onclick="setStructType('A2',1);"><button> A2 </button></a></td>
-                <td><a onclick="setStructType('A3',1);"><button> A2 </button></a></td>                
-                <td><a onclick="setStructType('A4',1);"><button> A4 </button></a></td>
-            </tr>
-        </table>
-        <p>Diatomic Compounds</p>
-        <table width="100%">            
-            <tr>
-                <td><a onclick="setStructType('B1',2);"><button> B1 </button></a></td>
-                <td><a onclick="setStructType('B2',2);"><button> B2 </button></a></td>
-                <td><a onclick="setStructType('B3',2);"><button> B3 </button></a></td>                
-            </tr>
-        </table>
-        <p>Complex Compounds</p>
-        <table width="100%">            
-            <tr>
-                <td><a onclick="setStructType('C3',2);"><button> C3</button></a></td>
-                <td><a onclick="setStructType('C9',2);"><button> C9</button></a></td>
-                <td><a onclick="setStructType('C15',2);"><button> C15 </button></a></td>
-            </tr>
-        </table>      
-        <p>Special Compounds</p>
-        <table width="100%">            
-            <tr>
-                <td><a onclick="setStructType('Gas',2);"><button> Gas</button></a></td>
-                <td><a onclick="setStructType('Pln',2);"><button> Pln</button></a></td>
-            </tr>
-        </table>     
-        <HR>         
-        <div id="StructureType"></div>
-        <HR>
-        <a href="#setAtoms">
-            <button  id="selectAtoms" type="button" disabled="true"> ==> Select Atoms </button>
-        </a>
-
-    </form>
-
-
-    <form id="setAtoms" class="panel" title="Select Elements" >
-
-            <table width="95%">
-                <tr><td colspan=6>Semi-Metals</td></tr>
-                <tr>
-                    <td><a onclick="addAtom('C');"><button> C </button></a></td>   
-                    <td><a onclick="addAtom('Si');"><button> Si </button></a></td>                                          
-                    <td><a onclick="addAtom('Ga');"><button> Ga </button></a></td>
-                    <td><a onclick="addAtom('Ge');"><button> Ge </button></a></td>
-                    <td><a onclick="addAtom('As');"><button> As </button></a></td>                    
-                </tr>
-                <tr><td colspan=6>Metals</td></tr>
-                <tr>                  
-                        <td><a onclick="addAtom('Li');"><button> Li </button></a></td>
-                        <td><a onclick="addAtom('Be');"><button> Be </button></a></td>   
-                        <td><a onclick="addAtom('Na');"><button> Na </button></a></td> 
-                        <td><a onclick="addAtom('Mg');"><button> Mg </button></a></td> 
-                        <td><a onclick="addAtom('Al');"><button> Al </button></a></td>                                                                            
-                    </tr>
-                <tr><td colspan=6>Non-Metals</td></tr>
-                <tr>
-                        <td><a onclick="addAtom('H');"><button> H </button></a></td>
-                        <td><a onclick="addAtom('B');"><button> B </button></a></td>                        
-                        <td><a onclick="addAtom('N');"><button> N </button></a></td>
-                        <td><a onclick="addAtom('O');"><button> O </button></a></td>     
-                        <td><a onclick="addAtom('F');"><button> F </button></a></td>
-                </tr>
-                <tr>
-                        <td><a onclick="addAtom('P');"><button> P </button></a></td>                               
-                        <td><a onclick="addAtom('S');"><button> S </button></a></td> 
-                        <td><a onclick="addAtom('Cl');"><button> Cl </button></a></td>                                                       
-                </tr>                
-                <tr><td colspan=6>Transition-Metals</td></tr>
-                <tr>
-                    <td><a onclick="addAtom('Cu');"><button> Cu </button></a></td> 
-                </tr>
-                <tr><td colspan=6>Rare-Earth-Metals</td></tr>
-                <tr><td colspan=6>Noble Gases</td></tr>  
-                <tr>
-                    <td><a onclick="addAtom('He');"><button> He </button></a></td>                      
-                    <td><a onclick="addAtom('Ne');"><button> Ne </button></a></td>                                                  
-                </tr>
-            </table>
-            <a onclick="delAtom();">
-                    <button  type="button"> Delete Last Atom </button>
-            </a>
-            <HR>
-            <div id="StructureType"></div>
-            <div id="CrystalAtoms"></div>
-            <HR>
-            <a href="#calcSolid">
-            <button id="readyReport" type="button" disabled="true"> ==> Ready for Report </button>
-            </a>
+        <p>Chose Structure Type</p>
+        <table width="100%"><tr>
+            <td>
+                <select name="StructureType" size="5" onchange="setStructType(StructureType.value)">
+                    <option value="Ah">Ah - Primitve Cubic</option>
+                    <option value="A1">A1 - Face Centered Cubic</option>                       
+                    <option value="A2">A2 - Body Centered Cubic</option>
+                    <option value="A3">A3 - Hexagonal</option>  
+                    <option value="A4">A4 - Terahedral Monoatomic</option>    
+                    <option value="B1">B1 - NaCl Type - fcc diatomic</option>
+                    <option value="B2">B2 - CsCl Type - bcc diatomic</option>
+                    <option value="B3">B3 - ZnS Type - tetrahedral diatomic - F43m </option>                   
+                    <option value="C3">C3 - Cuprit Type - diatomic</option>    
+                    <option value="C9">C9 - Pseudo-Crystolbalit - diatomic</option>                                 
+                </select>
+            </td>
+        </tr></table>
     
-        </form>
+        <HR>         
+        <div id="StructureType">No Strcuture selected</div>
+        <HR>
+        <p>Chose Atoms</p>
+        <table width="100%"><tr>
+            <td>
+                <select id="selectAtoms" name="SelectAtoms" size="5" onchange="addAtom(SelectAtoms.value)" disabled="true">
+                    <option value="H"> H </option>
+                    <option value="He"> He </option>
+                    <option value="Li"> Li </option>
+                    <option value="Be"> Be </option>
+                    <option value="B"> B </option>                    
+                    <option value="C">  C </option>
+                    <option value="N"> N </option>
+                    <option value="O"> O </option>
+                    <option value="F"> F </option>
+                    <option value="Ne"> Ne </option>   
+                    <option value="Na"> Na  </option> 
+                    <option value="Mg"> Mg </option> 
+                    <option value="Al"> Al </option> 
+                    <option value="Si"> Si </option> 
+                    <option value="P">  P </option> 
+                    <option value="S">  S </option> 
+                    <option value="Cl"> Cl </option> 
+                    <option value="Cu"> Cu </option> 
+                    <option value="Ga">  Ga </option> 
+                    <option value="Ge">  Ge </option>
+                    <option value="As">  As </option>                                                                    
+                </select>
+            </td>
+            <td>        
+                <a onclick="delAtom();"><button id="deleteAtom" type="button" disabled="true"> Delete Last Atom </button></a>
+                <a href="#calcSolid"><button id="readyReport" type="button" disabled="true"> ==> Ready for Report </button></a>           
+            </td>
+        </tr></table>      
+        <HR>
+        <div id="CrystalAtoms">No Atoms selected</div>
+        <HR>
+
+    </form>
+
 
         <form id="calcSolid" class="panel" title="Solid State Calculation" >
             <h2>Introduction</h2>

@@ -34,14 +34,12 @@ var evinkjmol = 96.485
 var blin = 135 // emp. Faktor für Lindemannsche Schmelzpktformel
 
 
-function setStructType(getType,getNum) {
-    var wrtline = document.createTextNode("selected " + getType + " with " + getNum+ " Atoms.");
-    var element = document.getElementById('StructureType').appendChild(wrtline);  
-    
-    maxCompund = getNum;
+function setStructType(getType) {
+
     strucType = getType;
     
     if (strucType == "Ah") {
+        maxCompund = 1;
         numAtom = 1;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};           
@@ -49,27 +47,32 @@ function setStructType(getType,getNum) {
 
 
     if (strucType == "A1") {
+        maxCompund = 1;
         numAtom = 1;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};           
     }
 
-
-    if (strucType == "A3") {
-        numAtom = 2;
-        crystForm = "hex";
-        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]};      
-        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.667 , 0.333, 0.500]};               
-    }
-
     if (strucType == "A2") {
+        maxCompund = 1;
         numAtom = 1;
         crystForm = "bcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};           
     }    
     
 
+    if (strucType == "A3") {
+        maxCompund = 1;
+        numAtom = 2;
+        crystForm = "hex";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]};      
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.667 , 0.333, 0.500]};               
+    }
+
+
+
     if (strucType == "A4") {
+        maxCompund = 1;
         numAtom = 2;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]}; 
@@ -77,6 +80,7 @@ function setStructType(getType,getNum) {
     }
     
     if (strucType == "B1") {
+        maxCompund = 2;
         numAtom = 2;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]}; 
@@ -84,6 +88,7 @@ function setStructType(getType,getNum) {
     }
 
     if (strucType == "B2") {
+        maxCompund = 2;
         numAtom = 2;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]}; 
@@ -91,6 +96,7 @@ function setStructType(getType,getNum) {
     }
 
     if (strucType == "B3") {
+        maxCompund = 2;
         numAtom = 2;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.00 , 0.00, 0.00]}; 
@@ -98,6 +104,7 @@ function setStructType(getType,getNum) {
     }
 
     if (strucType == "C3") {
+        maxCompund = 2;
         numAtom = 6;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.25 , 0.25, 0.25]}; 
@@ -109,6 +116,7 @@ function setStructType(getType,getNum) {
     }
 
     if (strucType == "C9") {
+        maxCompund = 2;
         numAtom = 6;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]}; 
@@ -120,6 +128,7 @@ function setStructType(getType,getNum) {
     }
 
     if (strucType == "Gas") {
+        maxCompund = 2;
         numAtom = 2;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.50 , 0.50, 0.50]};  
@@ -132,13 +141,27 @@ function setStructType(getType,getNum) {
         var wrtline = document.createTextNode("use default simple cubic");
         var element = document.getElementById('StructureType').appendChild(wrtline); 
         numAtom = 1;
+        maxCompund = 1;
         crystForm = "cub";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]};   
     }
 
     if (numAtom >= 1) {
         document.getElementById('selectAtoms').disabled = false; 
+        document.getElementById('deleteAtom').disabled = false;         
     }
+
+    if (numAtom == 0) {
+        document.getElementById('selectAtoms').disabled = true; 
+        document.getElementById('deleteAtom').disabled = true;         
+    }   
+
+
+    //var element = document.getElementById('StructureType');
+   // element.parentNode.removeChild(element);
+    var wrtline = document.createTextNode("selected " + getType + " with "  + maxCompund + " atoms." );
+    var element = document.getElementById('StructureType');  
+    element.replaceChild(wrtline, element.firstChild);      
 
 }
 
@@ -270,6 +293,19 @@ if (crystForm == "fcc") {
     var blable = ["P","G","H","N"];
     var b1titel = "Bandindex P - G - H - N";
  }
+
+ if (crystForm == "hex") {
+    var cbya = sqrt(8/3);
+    var t1 = [0.5, form(-sqrt(3)/2,3), 0.0];
+    var t2 = [0.5,  form(sqrt(3)/2,3), 0.0];
+    var t3 = [0.0, 0.0, form(cbya,3)];
+    var APoint = [0.50, 0.50, 0.00];  // K
+    var BPoint = [0.00, 0.00, 0.50];  // A
+    var CPoint = [0.50, 0.00, 0.50];  // L
+    var blable = ["K","G","A","L"];
+    var b1titel = "Bandindex K - G - A - L";
+ }
+
 
  var elemstr = "BandCalc";
  var txtstr = " The bandstructure is determined for the following symmetry points " 
@@ -775,10 +811,11 @@ var pjdos=[]; hnuf=[];lambda=[];omega=[]; eps2=[]; eps1 = [];
 var mesh = dosfit.length;
 pjdos = numeric.rep([mesh],0);
 for (jmesh = 0; jmesh < nfermi; jmesh++) {
-    for (gmesh = nfermi +1; gmesh < mesh; gmesh++ ) {
+    for (gmesh = nfermi; gmesh < mesh; gmesh++ ) {
         pjdos[gmesh-jmesh] = pjdos[gmesh-jmesh] + dosfit[jmesh]*dosfit[gmesh]*defbox*defbox;
     }
 }
+pjdos[0] = pjdos[1]/2;
 console.log ("PJOS",pjdos);
 //
 // using a constant oscillator strength we calculated the transition probability eps2
@@ -787,6 +824,7 @@ var alatA = alat*anull;
 var volnull = volume*power(alatA,3);
 var fosz = 22000/((lmsum - nvalence/2)*(nvalence/2));
 var hnuf = numeric.linspace(defbox,emaxy-eminy+defbox,mesh);
+console.log("ev-mesh",hnuf);
 var olabel = getlabel(hnuf,10);
 for (igo = 0; igo < mesh; igo++) {
     omega[igo] = form(hnuf[igo],2);
@@ -826,9 +864,10 @@ lambda = getlabel(reverseV(lambda),10);
 //
 // Calculate the optical gap using the Joint-DOS - could be very different in case of f-electrons
 var optigap = defbox;
-for (igo=1; igo < mesh-1; igo++) {
+for (igo=1; igo <= mesh; igo++) {
     if (pjdos[mesh-igo] > 0.0001) {
         optigap = hnuf[mesh-igo];
+        console.log ("Optik Gap",optigap,defbox,igo,mesh-igo);
     }
 }
 var absorpedge = evnm/optigap;
