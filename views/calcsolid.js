@@ -874,6 +874,19 @@ var absorpedge = evnm/optigap;
 if (isequal(optigap,defbox)) {
     optigap = 0;
 }
+var spektrumtyp = "extreme UV"
+if (absorpedge > 200) {
+    spektrumtyp = "near UV"; 
+    if (absorpedge > 380) {
+        spektrumtyp = "visible";
+        if (absorpedge > 780) {
+            spektrumtyp = "near IR";
+            if (absorpedge > 3000) {
+                spektrumtyp = "mid IR to microwave";
+            }
+        }
+    }
+}
 
 
 var elemstr = "OptCalc";
@@ -906,7 +919,8 @@ var txtstr =  " From the eps1 and eps2 values at infinity we can calculate the r
             + " % and the transmission T= " + form(transmission,1)*100 + " %. ";
 txtout(txtstr,elemstr);
 var txtstr =  " Furthermore we can calculate the absorption edge " + form(absorpedge,1) +" nm"
-            + " in eps2 and the optical band gap = " + form(optigap,2) + " eV.";
+            + " in eps2 and the optical band gap = " + form(optigap,2) + " eV."
+            + " The abosrption edge lies in the " + spektrumtyp + " spectrum.";
 txtout(txtstr,elemstr);
 
 
