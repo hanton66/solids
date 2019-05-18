@@ -59,7 +59,7 @@
                     <option value="A4">A4 - Terahedral Monoatomic</option>    
                     <option value="B1">B1 - NaCl Type - fcc diatomic</option>
                     <option value="B2">B2 - CsCl Type - bcc diatomic</option>
-                    <option value="B3">B3 - ZnS Type - tetrahedral diatomic - F43m </option>                   
+                    <option value="B3">B3 - ZnS Type - tetrahedral  </option>                   
                     <option value="C3">C3 - Cuprit Type - diatomic</option>    
                     <option value="C9">C9 - Pseudo-Crystolbalit - diatomic</option>                                 
                 </select>
@@ -72,26 +72,7 @@
         <p>Chose Atoms</p>
         <table width="100%"><tr>
 
-            <td>
-                <select id="selectAtom1" name="SelectAtom1" size="5" onchange="addAtom(SelectAtom1.value)" disabled="true">
-                    <option value="H"> H </option>
-                    <option value="He"> He </option>
-                    <option value="B"> B </option>                    
-                    <option value="C">  C </option>
-                    <option value="N"> N </option>
-                    <option value="O"> O </option>
-                    <option value="F"> F </option>
-                    <option value="Ne"> Ne </option>   
-                    <option value="Si"> Si </option> 
-                    <option value="P">  P </option> 
-                    <option value="S">  S </option> 
-                    <option value="Cl"> Cl </option> 
-                    <option value="Ar"> Cl </option>                     
-                    <option value="Ga">  Ga </option> 
-                    <option value="Ge">  Ge </option>
-                    <option value="As">  As </option>                                                                    
-                </select>
-            </td>
+
             <td>
                 <select id="selectAtom2" name="SelectAtom2" size="5" onchange="addAtom(SelectAtom2.value)" disabled="true">
                     <option value="Li"> Li </option>
@@ -120,6 +101,29 @@
                                                                     
                 </select>
             </td>
+
+            <td>
+                    <select id="selectAtom1" name="SelectAtom1" size="5" onchange="addAtom(SelectAtom1.value)" disabled="true">
+                        <option value="H"> H </option>
+                        <option value="He"> He </option>
+                        <option value="B"> B </option>                    
+                        <option value="C">  C </option>
+                        <option value="N"> N </option>
+                        <option value="O"> O </option>
+                        <option value="F"> F </option>
+                        <option value="Ne"> Ne </option>   
+                        <option value="Si"> Si </option> 
+                        <option value="P">  P </option> 
+                        <option value="S">  S </option> 
+                        <option value="Cl"> Cl </option> 
+                        <option value="Ar"> Cl </option>                     
+                        <option value="Ga">  Ga </option> 
+                        <option value="Ge">  Ge </option>
+                        <option value="As">  As </option>                                                                    
+                    </select>
+                </td>
+
+
         </tr>
         </table>
         <table>
