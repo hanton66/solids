@@ -147,12 +147,16 @@ function setStructType(getType) {
     }
 
     if (numAtom >= 1) {
-        document.getElementById('selectAtoms').disabled = false; 
+        document.getElementById('selectAtom1').disabled = false; 
+        document.getElementById('selectAtom2').disabled = false; 
+        document.getElementById('selectAtom3').disabled = false; 
         document.getElementById('deleteAtom').disabled = false;         
     }
 
     if (numAtom == 0) {
-        document.getElementById('selectAtoms').disabled = true; 
+        document.getElementById('selectAtom1').disabled = true; 
+        document.getElementById('selectAtom2').disabled = true; 
+        document.getElementById('selectAtom3').disabled = true; 
         document.getElementById('deleteAtom').disabled = true;         
     }   
 
@@ -867,7 +871,7 @@ var optigap = defbox;
 for (igo=1; igo <= mesh; igo++) {
     if (pjdos[mesh-igo] > 0.0001) {
         optigap = hnuf[mesh-igo];
-        console.log ("Optik Gap",optigap,defbox,igo,mesh-igo);
+//        console.log ("Optik Gap",optigap,defbox,igo,mesh-igo);
     }
 }
 var absorpedge = evnm/optigap;

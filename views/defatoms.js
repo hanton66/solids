@@ -168,15 +168,134 @@ function addAtom(getAtom) {
                         }
 
 
+    if (getAtom == "Ar") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 18,
+                            "e_spd": [-0.883, -0.382,  0.000],
+                            "q_spd": [     2,       6,      0], 
+                            "ratom":  106, 
+                            "nexp": 2.0 };     
+                        }
+
+    
+    if (getAtom == "K") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 19,
+                            "e_spd": [-0.089, - 0.000,  0.000],
+                            "q_spd": [     1,       0,      0], 
+                            "ratom":  227, 
+                            "nexp": 2.1 };     
+                           }
+
+
+    if (getAtom == "Ca") {
+          espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 20,
+                            "e_spd": [-0.141,  0.000,  0.000],
+                            "q_spd": [     2,       0,      0], 
+                            "ratom":  197, 
+                            "nexp": 2.1 };     
+                            }
+
+ 
+    if (getAtom == "Sc") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 21,
+                            "e_spd": [-0.156,  0.000,  -0.131],
+                            "q_spd": [     2,       0,      1], 
+                            "ratom":  161, 
+                            "nexp": 2.3 };     
+                         }
+
+    if (getAtom == "Ti") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 22,
+                            "e_spd": [-0.167, -0.000,  -0.170],
+                            "q_spd": [     2,       0,      2], 
+                            "ratom":  145, 
+                            "nexp": 2.2 };     
+                        }                        
+                        
+
+
+    if (getAtom == "V") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 23,
+                            "e_spd": [-0.176,  0.000,  -0.204],
+                            "q_spd": [     2,       0,      3], 
+                            "ratom":  131, 
+                            "nexp": 2.2 };     
+                        }
+
+
+    if (getAtom == "Cr") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 24,
+                            "e_spd": [-0.150, -0.000,  -0.118],
+                            "q_spd": [     2,       0,      4], 
+                            "ratom":  124, 
+                            "nexp": 2.3 };     
+                        }
+
+    if (getAtom == "Mn") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 25,
+                            "e_spd": [-0.191, -0.000,  -0.267],
+                            "q_spd": [     2,       0,      5], 
+                            "ratom":  137, 
+                            "nexp": 2.2 };     
+                        }
+
+ 
+    if (getAtom == "Fe") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 26,
+                            "e_spd": [-0.198,  0.000,  -0.296],
+                            "q_spd": [     2,       0,      6], 
+                            "ratom":  124, 
+                            "nexp": 2.1 };     
+                        }
+
+
+    if (getAtom == "Co") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 27,
+                            "e_spd": [-0.204,  0.000,  -0.322],
+                            "q_spd": [     2,       0,      7], 
+                            "ratom":  125, 
+                            "nexp": 2.0 };     
+                        }
+
+  
+    if (getAtom == "Ni") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 28,
+                            "e_spd": [-0.210,  0.000,  -0.349],
+                            "q_spd": [     2,       0,      8], 
+                            "ratom":  125, 
+                            "nexp": 2.0 };     
+                        }
+
+
     if (getAtom == "Cu") {
         espdofz[noAtom] = { "atName": getAtom,
                             "atCharge": 29,
                             "e_spd": [-0.172, 0.000,  -0.202],
-                            "q_spd": [     1,       0,     10], 
-                            "ratom":  128, 
-                            "nexp": 2.0 };  
-    }    
+                        "q_spd": [     1,       0,     10], 
+                        "ratom":  128, 
+                                        "nexp": 2.0 };  
+                        }  
 
+
+ 
+    if (getAtom == "Zn") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 30,
+                            "e_spd": [-0.222,  0.000,  -0.399],
+                            "q_spd": [     2,       0,     10], 
+                            "ratom":  133, 
+                            "nexp": 1.8 };     
+                        }
 
 
     if (getAtom == "Ga") {

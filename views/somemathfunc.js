@@ -152,7 +152,7 @@ function maxV(x) {
 //
 // get max abs(Value) of one-dimensional array
 function maxaV(x) {
-    var xerg = x[0]; y = xerg;
+    var xerg = Math.abs(x[0]); y = xerg;
     var lt=x.length;
     for (igo = 1; igo < lt; igo++) {
         if (x[igo] > xerg) {
