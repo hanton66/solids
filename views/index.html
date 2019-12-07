@@ -26,14 +26,19 @@
             canvas {
               background: white;
               border: 0px solid black;
-              width: 100%; 
+              width: auto; 
               height: auto;	
             }
             button {
-                font-size: 16px
+                font-size: 16px;
             }
             figure {
-                margin-left: 10px
+                margin-left: 10px;
+            }
+            table {
+                border: 1px solid grey;
+
+
             }
 
     </style>
@@ -48,20 +53,38 @@
 
     <form id="start" class="panel" title="Solid State Calculation" selected="true" >
 
-        <p>Chose Structure Type</p>
-        <table width="100%"><tr>
+        <p>Select Structure Type</p>
+        <table><tr>
             <td>
                 <select name="StructureType" size="5" onchange="setStructType(StructureType.value)">
-                    <option value="Ah">Ah - Primitve Cubic</option>
-                    <option value="A1">A1 - Face Centered Cubic</option>                       
-                    <option value="A2">A2 - Body Centered Cubic</option>
-                    <option value="A3">A3 - Hexagonal</option>  
-                    <option value="A4">A4 - Terahedral Monoatomic</option>    
-                    <option value="B1">B1 - NaCl Type - fcc diatomic</option>
-                    <option value="B2">B2 - CsCl Type - bcc diatomic</option>
-                    <option value="B3">B3 - ZnS Type - tetrahedral  </option>                   
-                    <option value="C3">C3 - Cuprit Type - diatomic</option>    
-                    <option value="C9">C9 - Pseudo-Crystolbalit - diatomic</option>                                 
+					<optgroup label="Elements">
+						<option value="Ah">Simple cubic</option>
+						<option value="A1">Cubic closed-packing</option>                       
+						<option value="A2">Body-centered cubic</option>
+						<option value="A3">Hexagonal closed-packing </option>  
+                        <option value="A4">Diamond cubic</option>    
+                        <option value="A9">Graphite (sim)</option>      
+					</optgroup>   
+					<optgroup label="AB Compounds">					
+						<option value="B1">fcc - diatomic</option>
+						<option value="B2">bcc - diatomic</option>
+						<option value="B3">Diamond cubic - diatomic</option>    
+					</optgroup>
+					<optgroup label="AB2 Compounds">												
+						<option value="C3">Cuprit Type</option>    
+						<option value="C9">Crystolbalit Type</option>  
+                    </optgroup>	
+                    <optgroup label=">2 Elements">				
+                            <option value="E21">E2_1 - Perowskit ABC3</option>                   
+                        </optgroup>	
+					<optgroup label="Alloys">				
+						<option value="L12">L1_2 - fcc (A3B)</option>                   
+					</optgroup>						
+					<optgroup label="Vapours">		
+                        <option value="V0">Noble Gas</option>     				
+						<option value="V1">Monoatomic A2</option>                      
+						<option value="V2">Diatomic Gas AB</option>  
+					</optgroup>	                                                  
                 </select>
             </td>
         </tr></table>
@@ -69,57 +92,55 @@
         <HR>         
         <div id="StructureType">No Strcuture selected</div>
         <HR>
-        <p>Chose Atoms</p>
-        <table width="100%"><tr>
-
-
-            <td>
-                <select id="selectAtom2" name="SelectAtom2" size="5" onchange="addAtom(SelectAtom2.value)" disabled="true">
-                    <option value="Li"> Li </option>
-                    <option value="Be"> Be </option> 
-                    <option value="Na"> Na  </option> 
-                    <option value="Mg"> Mg </option> 
-                    <option value="Al"> Al </option>       
-                    <option value="K"> K </option> 
-                    <option value="Ca"> Ca </option>                                                                                                      
-                </select>
-            </td>
-
-            <td>
-                <select id="selectAtom3" name="SelectAtom3" size="5" onchange="addAtom(SelectAtom3.value)" disabled="true">
-
-                    <option value="Sc"> Sc </option> 
-                    <option value="Ti"> Ti </option> 
-                    <option value="V"> V </option> 
-                    <option value="Mn"> Mn </option> 
-                    <option value="Cr"> Cr </option> 
-                    <option value="Fe"> Fe </option> 
-                    <option value="Co"> Co </option> 
-                    <option value="Ni"> Ni </option> 
-                    <option value="Cu"> Cu </option> 
-                    <option value="Zn"> Zn </option> 
-                                                                    
-                </select>
-            </td>
+        <p>Select Atoms</p>
+        <table><tr>
 
             <td>
                     <select id="selectAtom1" name="SelectAtom1" size="5" onchange="addAtom(SelectAtom1.value)" disabled="true">
-                        <option value="H"> H </option>
-                        <option value="He"> He </option>
+                    <optgroup label="Non-Metals">
                         <option value="B"> B </option>                    
                         <option value="C">  C </option>
+                        <option value="Si"> Si </option> 
+                        <option value="P">  P </option> 
+                        <option value="S">  S </option>                    
+                        <option value="Ga">  Ga </option> 
+                        <option value="Ge">  Ge </option>
+                        <option value="As">  As </option> 
+                    </optgroup>   
+                    <optgroup label="Metals">
+                        <option value="Li"> Li </option>
+                        <option value="Be"> Be </option> 
+                        <option value="Na"> Na  </option> 
+                        <option value="Mg"> Mg </option> 
+                        <option value="Al"> Al </option>       
+                        <option value="K"> K </option> 
+                        <option value="Ca"> Ca </option>   
+                    </optgroup>
+                        <optgroup label="d-Metals">
+                        <option value="Sc"> Sc </option> 
+                        <option value="Ti"> Ti </option> 
+                        <option value="V"> V </option> 
+                        <option value="Mn"> Mn </option> 
+                        <option value="Cr"> Cr </option> 
+                        <option value="Fe"> Fe </option> 
+                        <option value="Co"> Co </option> 
+                        <option value="Ni"> Ni </option> 
+                        <option value="Cu"> Cu </option> 
+                        <option value="Zn"> Zn </option> 
+                        <option value="Au"> Au </option>                         
+                    </optgroup>
+                    <optgroup label="Gases">
+                        <option value="H"> H </option>
                         <option value="N"> N </option>
                         <option value="O"> O </option>
                         <option value="F"> F </option>
+                        <option value="Cl"> Cl </option>                    
+                    </optgroup>                      
+                    <optgroup label="Noble Gases">
+                        <option value="He"> He </option>
                         <option value="Ne"> Ne </option>   
-                        <option value="Si"> Si </option> 
-                        <option value="P">  P </option> 
-                        <option value="S">  S </option> 
-                        <option value="Cl"> Cl </option> 
-                        <option value="Ar"> Cl </option>                     
-                        <option value="Ga">  Ga </option> 
-                        <option value="Ge">  Ge </option>
-                        <option value="As">  As </option>                                                                    
+                        <option value="Ar"> Ar </option>                      
+                    </optgroup>                     
                     </select>
                 </td>
 
@@ -129,10 +150,10 @@
         <table>
             <tr>
             <td>        
-                <a onclick="delAtom();"><button id="deleteAtom" type="button" disabled="true"> Delete Last Atom </button></a>
+                <a onclick="delAtom();"><button id="deleteAtom" type="button" disabled="true"> Delete Atom </button></a>
             </td>
             <td> 
-                <a href="#calcSolid"><button id="readyReport" type="button" disabled="true"> ==> Ready for Report </button></a>           
+                <a href="#calcSolid"><button id="readyReport" type="button" disabled="true"> Start Report </button></a>           
             </td>
         </tr></table>      
         <HR>
@@ -146,25 +167,81 @@
             <h2>Introduction</h2>
             <p>
             We investigate the electronic structure of the following solid by means
-            of a tight-binding bandstructure calculation. <br>
+            of a tight-binding bandstructure calculation [1]. <br>
             For this, we have to solve the crystal wave function of the electrons:
-            <img src="form_crystwav.png"><br>
+            <br>
+            <table><tr><td>(Eq.1)</td>
+            <td>
+            &psi;<sub>k</sub><sup>(n)</sup>(r) = &Sigma;<sub>v,l,m</sub> c<sup>(n)</sup><sub>k,v,l,m</sub> &chi;<sub>k,v,l,m</sub>(r)
+            </td>
+            </tr></table>
+            <br>
             Which can be expressed as the Bloch functions of the atomic orbitals:
-            <img src="form_blochwav.png"><br>
+            <br>
+            <table><tr><td>(Eq.2)</td>
+            <td>
+            &chi;<sub>k,v,l,m</sub>(r) = 1/&radic;N  &Sigma;<sub>R</sub> e<sup>ikR</sup> &phi;<sub>v,l,m</sub>(r-t<sub>v</sub>-R)
+            </td>
+            </tr></table>
+            <br>
             The Bloch waves have to fullfill the secular equation:
-            <img src="form_secequm.png"><br>
-            Were the following matrix elements belong to the tight-binding nearest neighbour approximation:
-            <img src="form_matrixelem.png"><br> 
-            In the TB approximation, the overlap integrals are defined by the nearest 
-            neighbour interactions between the atoms:
-            <img src="form_overlap.png"><br> 
+
+            <br>
+            <table><tr><td>(Eq.3)</td>
+            <td>
+            &Sigma;<sub>v,l,m</sub>[&lang;&chi;<sub>k,v,l,m</sub>|H|&chi;<sub>k,v',l',m'</sub>&rang; - &epsilon;<sub>k</sub><sup>(n)</sup>&lang;&chi;<sub>k,v,l,m</sub>|&chi;<sub>k,v',l',m'</sub>&rang;]c<sup>(n)</sup><sub>k,v,l,m</sub>    
+            </td>
+            </tr></table>
+            <br>
+
+            Where the following matrix elements belong to the tight-binding nearest neighbour approximation:
+
+            <br>
+            <table>
+            <tr><td>(Eq.4a)</td><td>
+            &lang;&phi;<sub>v,l,m</sub>(r-t<sub>v</sub>)|&phi;<sub>v',l',m'</sub>(r-t<sub>v'</sub>-R)&rang; = 1 ;if v=v', l=l', m=m' and R=0   
+            </td></tr>
+            <tr></tr><td>(Eq.4b)</td><td>
+            &lang;&phi;<sub>v,l,m</sub>(r-t<sub>v</sub>)|H|&phi;<sub>v',l',m'</sub>(r-t<sub>v'</sub>-R)&rang; = &epsilon;<sup>(on)</sup><sub>v,l,m</sub> ;if v=v', l=l', m=m' and R=0   
+            </td></tr>
+            <tr><td>(Eq.4c)</td><td>
+            &lang;&phi;<sub>v,l,m</sub>(r-t<sub>v</sub>)|H|&phi;<sub>v',l',m'</sub>(r-t<sub>v'</sub>-R)&rang; = &epsilon;<sup>(hop)</sup><sub>v,l,m,v',l',m'</sub> ;if t<sub>v</sub>-t<sub>v'</sub>-R = d<sub>NN</sub>   
+            </td></tr>
+
+        </table>
+            <br>
+
+            For the &epsilon;<sup>(on)</sup><sub>v,l,m</sub> we use tabulated one electron enrgies of the pure atoms from high-sophisticated DFT calulcations [9].<br>
+            In our TB approximation, the overlap integrals are defined by the nearest 
+            neighbour interactions between the atoms [2]:
+
+            <br>
+            <table><tr><td>(Eq.5)</td> 
+            <td>
+            &epsilon;<sup>(hop),k</sup><sub>v,l,m,v',l',m'</sub>
+            = &Sigma;<sub>R</sub> (d<sub>NN</sub>/|t<sub>v</sub>-t<sub>v'</sub>-R|)<sup>12</sup>
+            [Y<sub>l,m</sub>Y<sub>l',m'</sub>&eta;<sub>(&sigma;)</sub><sup>l,l'</sup>
+            &radic;(4/N)/|t<sub>v</sub>-t<sub>v'</sub>-R|<sup>q</sup>+
+            (&delta;<sub>l,l'</sub>&delta;<sub>m,m'</sub>-
+            Y<sub>l,m</sub>Y<sub>l',m'</sub>&eta;<sup>(&pi;)</sup><sub>l,l'</sub>/|t<sub>v</sub>-t<sub>v'</sub>-R|<sup>q</sup>
+            )]e<sup>ikd</sup>
+            </td>
+            </tr></table>
+            <br>
             We use only a small set of parameters to calculate them: 
-            <img src="form_harissonpara.png"><br>
-            This is basically the parametrization of Harrison with some simplifications.    
+            <table>
+                <tr><th>&eta;<sup>(&sigma;/&pi;)</sup><sub>l,l'</sub></th><th>s</th><th>p</th><th>d</th></tr>
+                <tr><td>s</td><td>-1,32/+0,00</td><td>+1,42/+0,00</td><td>-4,68/+0,00</td></tr>
+                <tr><td>p</td><td>-1,42/+0,00</td><td>+1,12/-0,63</td><td>-4,37/+2,02</td></tr>
+                <tr><td>d</td><td>+4,68/+0,00</td><td>+4,37/-2,02</td><td>-35,6/+19.2</td></tr>
+            </table>
+            <br>
+            The value q equals 2 for sp/sp-interactions, 3.5 for sp/d-mixed interactions and 5 for d-d interactions.
+            This is basically the parametrization of Harrison [3] with some simplifications.  
             </p>
 
             <a onclick = "result = buildCrystal();">
-                <button  type="button"> Show the results: </button>
+                <button  type="button"> Run Calculation </button>
             </a>
 
             <HR>
@@ -196,7 +273,15 @@
             <canvas id="debyetemp" width="280" height="260"> </canvas> 
             <figcaption>Fig 3. The specific heat capacity in J/kg/k (y-axis) along the temperature in K (x-axis).</figcaption></figure>                     
             <div id="PhysCalc2"></div>
-            <div id="formula"><img src="form_debye.svg"></div>            
+            <br>
+            <table><tr><td>(Eq.6)</td>
+            <td>
+            c<sub>v</sub> = 
+            9Nk<sub>B</sub>(T/T<sub>D</sub>)&int;<sub>0</sub><sup>T<sub>D</sub>/T</sup>
+            x<sup>4</sup>e<sup>x</sup>/(e<sup>x</sup>-1)<sup>2</sup>dx
+            </td>
+            </tr></table>
+            <br>        
 
             <h2>Optical Properties</h2>
             <div id="OptCalc"></div>
@@ -208,14 +293,14 @@
             <canvas id="eps1eps2" width="280" height="200"> </canvas>   
             <figcaption>Fig 5. The scaled eps1 and eps2 function (y-axis) along the photon wavelength in nm (x-axis).</figcaption></figure>                     
             <div id="OptCalc3"></div>              
-
+            <HR>
 
             <h2>Summary</h2>
             <p>The following table gives an overview of the calculated values.</p>
-            <table border="1" align="left" width="90%">
+            <table>
                 <tr><th colspan="2">Compound</th></tr>      
                 <tr><td>Formula</td><td align="right"><div id="c_compoundname"></div></td></tr>                
-                <tr><th colspan="2">Crystal Strcuture</th></tr>      
+                <tr><th colspan="2">Crystal Strcuture</th></tr>
                 <tr><td>Crystal Structure</td><td align="right"><div id="c_strucType"></div></td></tr>
                 <tr><td>Bravais Lattice</td><td align="right"><div id="c_crystForm"></div></td></tr>
                 <tr><td>Lattice Constant</td><td align="right"><div id="c_alat"></div></td></tr>                                                          
@@ -259,38 +344,53 @@
                 <tr><td>Transmission</td><td align="right"><div id="c_transmission"></div></td></tr>  
                 <tr><td>Absorption Edge</td><td align="right"><div id="c_absorpedge"></div></td></tr>
  
- 
- 
             </table>
 
-        </form>
+            <HR>
+            <h2>Mathematical Symbols</h2>
+    <table>
+    <tr><td>&psi;<sub>k</sub><sup>(n)</sup></td><td>: The n<sup>th</sup> Crystal Electrons Wave Function at bandindex k</td></tr>
+    <tr><td>r </td><td>: Real space position</td><tr>
+    <tr><td>v </td><td>: v<sup>th</sup> atom in the unit cell</td><tr>
+    <tr><td>l </td><td>: Quntuam number of the angular momentum of an electron (s,p,d)</td><tr>
+    <tr><td>m </td><td>: Quantum number of the magnetic number of an electron  (-l to l)</td><tr>
+    <tr><td>k </td><td>: reciprocal space vector, wavenumber</td><tr>
+    <tr><td>&chi;<sub>k,v,l,m</sub> </td><td>: Bloch wave for an electron with wavenumber k</td><tr>
+    <tr><td>&epsilon;<sub>k</sub><sup>(n)</sup> </td><td>: band ebergy of the n<sup>th</sup> band at wavenumber k</td><tr>
+    <tr><td>c<sup>(n)</sup><sub>k,v,l,m</sub> </td><td>: coefficent from the secular equation of the one electron wave function</td><tr>
+    <tr><td>&phi;<sub>v,l,m</sub> </td><td>: One elctron wave function</td><tr>
+    <tr><td>H </td><td>: Hamilton Operator</td><tr>
+    <tr><td>N </td><td>: Nomralization factor, Coordination number, Number of atoms</td><tr>
+    <tr><td>R </td><td>: Real Space vextor </td><tr>
+    <tr><td>t<sub>v</sub> </td><td>: Real space position of atom v</td><tr>
+    <tr><td>&epsilon;<sup>(on)</sup> </td><td>: On-site elctron energy of an electron at one atom</td><tr>
+    <tr><td>&epsilon;<sup>(hop)</sup> </td><td>: Hopping/Overlap energy of an elctron between two atoms                </td><tr>
+    <tr><td>d<sub>NN</sub> </td><td>: next-nearest distance between two atoms</td><tr>
+    <tr><td>Y<sub>l,m</sub> </td><td>: Spherical harmonics of quantum number l,m</td><tr>
+    <tr><td>&eta;<sup>x</sup> </td><td>: Overlapping parameter</td><tr>
+    <tr><td>&delta; </td><td>: Delta-Function/Kronecker Symbol</td><tr>
+    <tr><td>q </td><td>: Exponent for overlapping energy</td><tr>
+    <tr><td>k<sub>B</sub> </td><td>: Boltzman Constant</td><tr>
+    <tr><td>c<sub>v</sub> </td><td>: Specifice heat capacity</td><tr>
+    <tr><td>T </td><td>: Temperature</td><tr>
+    <tr><td>T<sub>D</sub> </td><td>: Debye temperature</td><tr>       
+    </table>
 
-    <ul id="menue" class="panel" title="Universe Simulation" >
+            <HR>
+            <h2>References</h2>
+            <p>[1] <cite><a href="https://en.wikipedia.org/wiki/Tight_binding">Tight-Binding Method</a></cite></p>
+            <p>[2] <cite><a href="https://www.researchgate.net/publication/280131674_Simple_Tight_Binding_Electronic_Structure_Calculation_Method_based_on_a_Mathematical_Prototyping_System">Simple TB-Method</a></cite></p>
+            <p>[3] <cite>Harrison, Walter A. Tight-binding theory of molecules and solids. Pure and applied chemistry 61.12 (1989): 2161-2169.</cite></p>
+            <p>[4] <cite><a href="https://en.wikipedia.org/wiki/Equation_of_state#Equations_of_state_for_solids_and_liquids">Equation-of-State</a></cite></p>
+            <p>[5] <cite><a href="https://en.wikipedia.org/wiki/Debye_model">Debye Model</a></cite></p>
+            <p>[6] <cite><a href="https://en.wikipedia.org/wiki/Kramers%E2%80%93Kronig_relations">Kramers Kroning Relation</a></cite></p>
+            <p>[7] <cite><a href="https://en.wikipedia.org/wiki/Refractive_index ">Refractive Index</a></cite></p>
+            <p>[8] <cite><a href="https://en.wikipedia.org/wiki/Bulk_modulus">Bulk Modulus</a></cite></p>  
+            <p>[9] <cite><a href="https://www.nist.gov/pml/atomic-reference-data-electronic-structure-calculations/atomic-reference-data-electronic-7">Atomic Reference Data</a></cite></p>
+
             
-                <p>Results:</p>
-                <HR>
-                <li><a href="#hubbledev">Show Hubble Expansion</a></li>
-                <li><a href="#distdev">Show Universe Size</a></li>
-                <li><a href="#scaledev">Show Scale Factor</a></li>
-                <li><a href="#dscaledev">Show De-/Acceleration Phase</a></li>      
-                <li><a href="#d2scaledev">Show Curvature of the Expansion</a></li>                    
-                <HR>
-                <p>Compare with Experimental Data:</p>
-                <li><a href="#compred">Red-Shift Data vs Hubble Values</a></li>
-        </ul>
- 
 
-
-
-
-
-
-
-
-
-
-
-
+        </form>
 
 
 

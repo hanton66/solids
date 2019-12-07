@@ -70,13 +70,20 @@ function setStructType(getType) {
     }
 
 
-
     if (strucType == "A4") {
         maxCompund = 1;
         numAtom = 2;
         crystForm = "fcc";
         atomPos[1] =  { "Sort": 1 , "Pos":[ 0.0 , 0.0, 0.0]}; 
         atomPos[2] =  { "Sort": 1 , "Pos":[ 0.25 , 0.25, 0.25]};           
+    }
+
+    if (strucType == "A9") {
+        maxCompund = 1;
+        numAtom = 2;
+        crystForm = "hex";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]};   
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.333 , 0.667, 0.005]};                   
     }
     
     if (strucType == "B1") {
@@ -127,12 +134,49 @@ function setStructType(getType) {
         atomPos[6] =  { "Sort": 2 , "Pos":[ 0.125 , 0.375, 0.375]};                  
     }
 
-    if (strucType == "Gas") {
+    if (strucType == "E21") {
+        maxCompund = 3;
+        numAtom = 5;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.000 , 0.000, 0.000]}; 
+        atomPos[2] =  { "Sort": 2 , "Pos":[ 0.500 , 0.500, 0.500]}; 
+        atomPos[3] =  { "Sort": 3 , "Pos":[ 0.000 , 0.500, 0.500]}; 
+        atomPos[4] =  { "Sort": 3 , "Pos":[ 0.500 , 0.000, 0.500]};   
+        atomPos[5] =  { "Sort": 3 , "Pos":[ 0.500 , 0.500, 0.000]};                      
+    }    
+
+
+    if (strucType == "L12") {
+        maxCompund = 2;
+        numAtom = 4;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 2 , "Pos":[ 0.000 , 0.000, 0.000]}; 
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.000 , 0.500, 0.500]}; 
+        atomPos[3] =  { "Sort": 1 , "Pos":[ 0.500 , 0.000, 0.500]}; 
+        atomPos[4] =  { "Sort": 1 , "Pos":[ 0.500 , 0.500, 0.000]};                 
+    }
+
+    if (strucType == "V0") {
+        maxCompund = 1;
+        numAtom = 1;
+        crystForm = "fcc";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.00 , 0.00, 0.00]};              
+    } 
+
+    if (strucType == "V1") {
+        maxCompund = 1;
+        numAtom = 2;
+        crystForm = "cub";
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.49 , 0.49, 0.49]};  
+        atomPos[2] =  { "Sort": 1 , "Pos":[ 0.51 , 0.51, 0.51]};             
+    } 
+
+    if (strucType == "V2") {
         maxCompund = 2;
         numAtom = 2;
         crystForm = "cub";
-        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.50 , 0.50, 0.50]};  
-        atomPos[2] =  { "Sort": 2 , "Pos":[ 0.51 , 0.51, 0.51]};             
+        atomPos[1] =  { "Sort": 1 , "Pos":[ 0.48 , 0.48, 0.48]};  
+        atomPos[2] =  { "Sort": 2 , "Pos":[ 0.52 , 0.52, 0.52]};             
     }       
 
     if (numAtom == 0) {
@@ -148,15 +192,11 @@ function setStructType(getType) {
 
     if (numAtom >= 1) {
         document.getElementById('selectAtom1').disabled = false; 
-        document.getElementById('selectAtom2').disabled = false; 
-        document.getElementById('selectAtom3').disabled = false; 
         document.getElementById('deleteAtom').disabled = false;         
     }
 
     if (numAtom == 0) {
         document.getElementById('selectAtom1').disabled = true; 
-        document.getElementById('selectAtom2').disabled = true; 
-        document.getElementById('selectAtom3').disabled = true; 
         document.getElementById('deleteAtom').disabled = true;         
     }   
 
@@ -302,7 +342,7 @@ if (crystForm == "fcc") {
     var cbya = sqrt(8/3);
     var t1 = [0.5, form(-sqrt(3)/2,3), 0.0];
     var t2 = [0.5,  form(sqrt(3)/2,3), 0.0];
-    var t3 = [0.0, 0.0, form(cbya,3)];
+    var t3 = [0.0, 0.0, form(cbya,3)*2];
     var APoint = [0.50, 0.50, 0.00];  // K
     var BPoint = [0.00, 0.00, 0.50];  // A
     var CPoint = [0.50, 0.00, 0.50];  // L
@@ -335,7 +375,10 @@ txtout(txtstr,elemstr);
 
 //
 // Determine the set of reciprocal space and k-Vectors 
-var B = numeric.inv(T)
+var B = numeric.transpose(numeric.inv(T));
+//var B = numeric.transpose(Z);
+console.log ("B Matrix ",B);
+console.log ("B-1 Vektor ",B[0]);
 
 var elemstr = "ReportCalc";
 var txtstr = " Which leads to the following reciprocal space vectors B = " 
@@ -351,6 +394,7 @@ for (irun=0; irun < nkband; irun++) {
                     ];
 
 }
+console.log ("K-Points ",kpoint);
 
 //
 // build a super cell and determine the vectors between the neighbored cells
@@ -361,11 +405,15 @@ for (h=-ncut; h <= ncut; h++) {
         for (l=-ncut; l <= ncut; l++) {
             iq = iq + 1
             vp = [h,k,l];
-            vecpos[iq] = numeric.dot(T,vp);       
+            vecpos[iq] = numeric.dot(vp,T);  
+//            vecpos[iq] = [numeric.dot(h,T[0])),
+//                          numeric.sum(numeric.dot(k,T[1])),
+//                          numeric.sum(numeric.dot(l,T[2])),];     
          } 
     }
  } 
  var nq = iq 
+ console.log ("Vectorpos ",vecpos);
 //
 // determine the real atomic positions within the unit cell and the super cell
 var xatomcor = [];
@@ -913,12 +961,12 @@ txtout(txtstr,elemstr);
 
 var elemstr = "OptCalc2";
 txtout("",elemstr);
-var txtstr =  " From the JDOS we can calculate the dielectric and suszeptibility functions by using the Kramer-Kronings relation. "
+var txtstr =  " From the JDOS we can calculate the dielectric and suszeptibility functions by using the Kramer-Kronings relation [6]. "
             + " These are shown in the graph below where eps_1 is plotted in Magenta and eps2 is "
             + " plotted in Cyan. The eps2-function represents the absorption spectra of the compound. "
             + " The values of eps_1 and eps_2 are plotted against the wavelength of a photon in nm."
 txtout(txtstr,elemstr);
-var txtstr =  " From the eps1 and eps2 values at infinity we can calculate the refractive index"
+var txtstr =  " From the eps1 and eps2 values at infinity we can calculate the refractive index [7]"
             + " which is n=" + form(nindex,2) + ", the refelction R= " + form(reflection*100,1)
             + " % and the transmission T= " + form(transmission,1)*100 + " %. ";
 txtout(txtstr,elemstr);
@@ -974,22 +1022,22 @@ var txtstr = " From the total valence energy calculation of the DOS we try to es
 txtout(txtstr,elemstr);
 txtout("",elemstr);
 var txtstr = " The molare mass of the compound is about " 
-                + form(molmasse,2) + " g/mol."
+                + form(molmasse,1) + " g/mol."
                 + " The equlibrium volume of the unit cell is " + form(volnull,2) + " A^3. "
                 + " That leads to a mass density of the compund of " + form(dichte,3) + " kg/l. ";
 txtout(txtstr,elemstr);
 txtout("",elemstr);
 var txtstr = " Using an equation of state, we can determine from the energy/volume relation "
-            + " other meachnical, thermal and elastic properties. The bonding energy per unit cell "
+            + " other meachnical, thermal and elastic properties [4]. The bonding energy per unit cell "
             + " is about" + form(ebond,2) + " eV, which is roughly a dissoziation energy of "
             + form(Enull*evinkjmol,1) + " kj/mol.";
 txtout(txtstr,elemstr);
-var txtstr = " The bulk modulus is " + form(bulkmodul,1) + " GPa. The other eleastic constants "
+var txtstr = " The bulk modulus is " + form(bulkmodul,1) + " GPa. The other eleastic constants [8]"
             + " can be approximated in the case of a polycrystalline substance. The shearmodul is "
             + form(shearmodul,1) + " GPa and the Young moduls is " + form(youngmodul,1) + " GPa."
             + " The tetragonal shear modul is " + form(c11modul,1) + " GPa.";
 txtout(txtstr,elemstr);
-var txtstr = " The Debye temperature of this compound is " + form(debye,1) + " K. "
+var txtstr = " The Debye temperature [5] of this compound is " + form(debye,1) + " K. "
             + " The speed of sound is " + form(schall,1) + " m/s with a transversal velocity part "
             + " of " + form(vtwav,1) + " m/s and a logituidinal part of " + form(vlwav,1) + " m/s.";          ;
 txtout(txtstr,elemstr);
@@ -1023,15 +1071,16 @@ var alphal = grueneisen/3*cvrt/bulkmodul*dichte;
 
 var elemstr = "PhysCalc2";
 txtout("",elemstr);
-var txtstr = " The Debye temperature allows us to calcuate the specific heat capacity. " 
+var txtstr = " The Debye temperature allows us to calcuate the specific heat capacity (Eq.6). " 
             + " At room temerature the specific heat capacity is "
             + form(cvrt,1) + " J/kg/K. The graph above shows the temperature dependency of "
             + " the heat capacity. "; 
 txtout(txtstr,elemstr);
 var txtstr = " The Grüneisen-parameter is set to g=" + form(grueneisen,3) + ". "
             + " We can estimate with the bulk modulus and the heat capacity the linear"
-            + " thermal expansoion coefficient with a= " + form(alphal,2) + " um/m/K."; 
+            + " thermal expansoion coefficient with a= " + form(alphal,2) + " µm/m/K."; 
 txtout(txtstr,elemstr);
+
 
 
 // Fill the table

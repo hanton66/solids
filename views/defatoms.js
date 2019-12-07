@@ -23,7 +23,7 @@ function addAtom(getAtom) {
                             "atCharge": 2,
                             "e_spd": [-0.570 ,  0.000,  0.000],
                             "q_spd": [     2,       0,      0], 
-                            "ratom":  50, 
+                            "ratom":  250, 
                             "nexp": 2.0 };   
     }  
 
@@ -97,7 +97,7 @@ function addAtom(getAtom) {
                             "atCharge": 3,
                             "e_spd": [-1.323 , -0.498,  0.000],
                             "q_spd": [     2,       6,      0], 
-                            "ratom":  50, 
+                            "ratom":  220, 
                             "nexp": 2.0 };  
     }
 
@@ -327,8 +327,16 @@ function addAtom(getAtom) {
                             "nexp": 2.0 };  
     }
 
-
+    if (getAtom == "Au") {
+        espdofz[noAtom] = { "atName": getAtom,
+                            "atCharge": 79,
+                            "e_spd": [-0.162,  0.000,  -0.306],
+                            "q_spd": [     1,       0,     10], 
+                            "ratom":  144, 
+                            "nexp": 2.5 };  
     }
+
+}
 
     if (noAtom > maxCompund) {
         noAtom = noAtom - 1;
